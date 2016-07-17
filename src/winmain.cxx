@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <boost/log/trivial.hpp>
 #include <d3d9.h>
 #include <d3dx9.h>
 #include "d3d.hxx"
@@ -40,6 +41,8 @@ WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	BOOST_LOG_TRIVIAL(trace) << "CapmanDX";
+
 	const wchar_t windowClassName[] = L"capmandx";
 	WNDCLASSEX wc = { 0 };
 	wc.cbSize = sizeof(WNDCLASSEX);

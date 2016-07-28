@@ -6,18 +6,11 @@ extern "C" {
 #endif
 
 extern bool active;
-extern LPDIRECT3D9 d3d;
-extern LPDIRECT3DDEVICE9 d3ddev;
+extern IDirect3D9 *d3d;
+extern IDirect3DDevice9 *d3dDev;
 
 bool D3DInit(HWND hwnd);
 void D3DUninit();
-
-#define CUSTOM_FVF (D3DFVF_XYZ | D3DFVF_DIFFUSE)
-
-struct CUSTOM_VERTEX {
-	float x, y, z;
-	DWORD color;
-};
 
 #ifdef __cplusplus
 }

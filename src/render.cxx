@@ -15,7 +15,7 @@ static int frameCount = 0;
 bool RenderInit()
 {
 	// initializes with a triangle buffer
-	d3ddev->CreateVertexBuffer(3 * sizeof(CUSTOM_VERTEX), 0, CUSTOM_FVF, D3DPOOL_MANAGED, &verticesBuffer, NULL);
+	d3dDev->CreateVertexBuffer(3 * sizeof(CUSTOM_VERTEX), 0, CUSTOM_FVF, D3DPOOL_MANAGED, &verticesBuffer, NULL);
 	if (verticesBuffer == NULL)
 		return false;
 
@@ -43,23 +43,23 @@ void RenderUninit()
 
 void Render()
 {
-	d3ddev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 0.0f, 0);
-	d3ddev->BeginScene();
-	d3ddev->SetFVF(CUSTOM_FVF);
+	d3dDev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 0.0f, 0);
+	d3dDev->BeginScene();
+	d3dDev->SetFVF(CUSTOM_FVF);
 
 	D3DXMATRIX matrixRotateY;
 	D3DXMatrixRotationY(&matrixRotateY, D3DXToRadian(angle));
 	angle += angleToPlus;
 	if (angle > 89.0f || angle < -89.0f)
 		angleToPlus = -angleToPlus;
-	d3ddev->SetTransform(D3DTS_WORLD, &matrixRotateY);
+	d3dDev->SetTransform(D3DTS_WORLD, &matrixRotateY);
 
 	D3DXMATRIX matrixView;
 	D3DXMatrixLookAtLH(&matrixView,
 		&D3DXVECTOR3(0.0f, 0.0f, -3.0f),  // the camera position
 		&D3DXVECTOR3(0.0f, 0.0f, 0.0f),   // the look-at position
 		&D3DXVECTOR3(0.0f, 1.0f, 0.0f));  // the up direction
-	d3ddev->SetTransform(D3DTS_VIEW, &matrixView);
+	d3dDev->SetTransform(D3DTS_VIEW, &matrixView);
 
 	D3DXMATRIX matrixProjection;
 	D3DXMatrixPerspectiveFovLH(&matrixProjection,
@@ -67,14 +67,14 @@ void Render()
 		1.3333f,           // aspect ratio
 		1.0f,              // the near view-plane
 		10.0f);            // the far view-plane
-	d3ddev->SetTransform(D3DTS_PROJECTION, &matrixProjection);
+	d3dDev->SetTransform(D3DTS_PROJECTION, &matrixProjection);
 
 	// draws vertex buffer to display
-	d3ddev->SetStreamSource(0, verticesBuffer, 0, sizeof(CUSTOM_VERTEX));
-	d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 1);
+	d3dDev->SetStreamSource(0, verticesBuffer, 0, sizeof(CUSTOM_VERTEX));
+	d3dDev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 1);
 
-	d3ddev->EndScene();
-	d3ddev->Present(NULL, NULL, NULL, NULL);
+	d3dDev->EndScene();
+	d3dDev->Present(NULL, NULL, NULL, NULL);
 	lastTick = GetTickCount();
 
 	frameCount++;

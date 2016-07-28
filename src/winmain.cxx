@@ -70,12 +70,13 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdS
 	ShowWindow(hwnd, nCmdShow);
 
 	if (!Initialize(hwnd)) {
+		Uninitialize();
 		return 0;
 	}
 
 	MSG msg;
 	while (1) {
-		if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
+		while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}

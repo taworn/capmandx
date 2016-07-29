@@ -1,24 +1,25 @@
 #include <windows.h>
+#include <assert.h>
 #include <boost/log/trivial.hpp>
 #include <d3d9.h>
 #include <d3dx9.h>
-#include "d3d.hxx"
-#include "render.hxx"
+#include "game.hxx"
 
-static LPDIRECT3DVERTEXBUFFER9 verticesBuffer = NULL;
-static float angle = 0.0f;
-static float angleToPlus = 3.0f;
-static DWORD lastTick = 0;
-static ULONGLONG timeStart = 0;
-static int frameCount = 0;
-
-bool RenderInit()
+void Game::init()
 {
+	timeStart = GetTickCount();
+	frameCount = 0;
+
+	modelX = 0.0f;
+	modelY = 0.0f;
+	modelDx = 0.0f;
+	modelDy = 0.0f;
+	angle = 0.0f;
+	angleToPlus = 3.0f;
+
 	// initializes with a triangle buffer
 	d3dDev->CreateVertexBuffer(3 * sizeof(CUSTOM_VERTEX), 0, CUSTOM_FVF, D3DPOOL_MANAGED, &verticesBuffer, NULL);
-	if (verticesBuffer == NULL)
-		return false;
-
+	assert(verticesBuffer);
 	CUSTOM_VERTEX verticesData[] = {
 	    { -1.0f, -1.0f, 0.0f, D3DCOLOR_XRGB(255, 0, 0), },
 	    { 0.0f, 1.0f, 0.0f, D3DCOLOR_XRGB(0, 255, 0), },
@@ -28,12 +29,9 @@ bool RenderInit()
 	verticesBuffer->Lock(0, 0, (void**)&p, 0);
 	memcpy(p, verticesData, sizeof(verticesData));
 	verticesBuffer->Unlock();
-
-	lastTick = GetTickCount();
-	return true;
 }
 
-void RenderUninit()
+void Game::fini()
 {
 	if (verticesBuffer != NULL) {
 		verticesBuffer->Release();
@@ -41,18 +39,78 @@ void RenderUninit()
 	}
 }
 
-void Render()
+void Game::fps()
+{
+	frameCount++;
+	ULONGLONG timeUsage = GetTickCount() - timeStart;
+	if (timeUsage > 1000) {
+		ULONGLONG fps = frameCount * 1000 / timeUsage;
+		timeStart = GetTickCount();
+		frameCount = 0;
+		BOOST_LOG_TRIVIAL(trace) << "FPS: " << fps;
+		wchar_t buffer[64];
+		wsprintf(buffer, L"FPS: %ld\n", fps);
+		OutputDebugStringW(buffer);
+	}
+}
+
+bool Game::handleKey(HWND hwnd, WPARAM key)
+{
+	if (key == VK_SPACE) {
+		// space
+		OutputDebugStringA("SPACE keydown\n");
+		return true;
+	}
+	else if (key == VK_RETURN) {
+		// space
+		OutputDebugStringA("ENTER keydown\n");
+		return true;
+	}
+	else if (key == 0x57 || key == VK_UP) {
+		// up
+		OutputDebugStringA("W -or- UP keydown\n");
+		modelDy = -0.1f;
+		return true;
+	}
+	else if (key == 0x53 || key == VK_DOWN) {
+		// down
+		OutputDebugStringA("S -or- DOWN keydown\n");
+		modelDy = 0.1f;
+		return true;
+	}
+	else if (key == 0x41 || key == VK_LEFT) {
+		// left
+		OutputDebugStringA("A -or- LEFT keydown\n");
+		modelDx = -0.1f;
+		return true;
+	}
+	else if (key == 0x44 || key == VK_RIGHT) {
+		// right
+		OutputDebugStringA("D -or- RIGHT keydown\n");
+		modelDx = 0.1f;
+		return true;
+	}
+	return false;
+}
+
+void Game::render()
 {
 	d3dDev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 0.0f, 0);
 	d3dDev->BeginScene();
 	d3dDev->SetFVF(CUSTOM_FVF);
 
+	D3DXMATRIX matrixModel;
+	D3DXMatrixTranslation(&matrixModel, modelX + modelDx, modelY + modelDy, 0);
+	modelX += modelDx;
+	modelY += modelDy;
+	modelDx = 0.0f;
+	modelDy = 0.0f;
 	D3DXMATRIX matrixRotateY;
 	D3DXMatrixRotationY(&matrixRotateY, D3DXToRadian(angle));
 	angle += angleToPlus;
 	if (angle > 89.0f || angle < -89.0f)
 		angleToPlus = -angleToPlus;
-	d3dDev->SetTransform(D3DTS_WORLD, &matrixRotateY);
+	d3dDev->SetTransform(D3DTS_WORLD, &(matrixRotateY * matrixModel));
 
 	D3DXMATRIX matrixView;
 	D3DXMatrixLookAtLH(&matrixView,
@@ -75,18 +133,7 @@ void Render()
 
 	d3dDev->EndScene();
 	d3dDev->Present(NULL, NULL, NULL, NULL);
-	lastTick = GetTickCount();
 
-	frameCount++;
-	ULONGLONG timeUsage = GetTickCount() - timeStart;
-	if (timeUsage > 1000) {
-		ULONGLONG fps = frameCount * 1000 / timeUsage;
-		BOOST_LOG_TRIVIAL(trace) << "FPS: " << fps;
-		char buffer[128];
-		sprintf(buffer, "FPS: %lld\n", fps);
-		OutputDebugStringA(buffer);
-		timeStart = GetTickCount();
-		frameCount = 0;
-	}
+	fps();
 }
 

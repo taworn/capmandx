@@ -2,20 +2,24 @@
 #include <boost/log/trivial.hpp>
 #include <d3d9.h>
 #include "d3d.hxx"
-#include "render.hxx"
+#include "game.hxx"
+
+static Game *game = NULL;
 
 bool Initialize(HWND hwnd)
 {
 	if (!D3DInit(hwnd))
 		return false;
-	if (!RenderInit())
-		return false;
+	game = new Game(d3dDev);
 	return true;
 }
 
 void Uninitialize()
 {
-	RenderUninit();
+	if (game) {
+		delete game;
+		game = NULL;
+	}
 	D3DUninit();
 }
 
@@ -24,15 +28,19 @@ WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
 	case WM_KEYDOWN:
-		if (wParam == VK_ESCAPE)
-			PostMessage(hwnd, WM_CLOSE, 0, 0);
+		if (!game || !game->handleKey(hwnd, wParam)) {
+			if (wParam == VK_ESCAPE)
+				PostMessage(hwnd, WM_CLOSE, 0, 0);
+		}
 		return 0;
+
 	case WM_ACTIVATE:
 		if (wParam == WA_ACTIVE || wParam == WA_CLICKACTIVE)
 			active = true;
 		else
 			active = false;
 		return 0;
+
 	case WM_DESTROY:
 		Uninitialize();
 		PostQuitMessage(0);
@@ -86,7 +94,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdS
 		if (msg.message == WM_QUIT)
 			break;
 		if (active)
-			Render();
+			game->render();
 	}
 
 	return (int)msg.wParam;

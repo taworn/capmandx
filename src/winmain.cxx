@@ -3,6 +3,7 @@
 #include <d3d9.h>
 #include "d3d.hxx"
 #include "game.hxx"
+#include "scenes/scene.hxx"
 
 static Game *game = NULL;
 
@@ -28,7 +29,7 @@ WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
 	case WM_KEYDOWN:
-		if (!game || !game->handleKey(hwnd, wParam)) {
+		if (!game || !game->currentScene()->handleKey(hwnd, wParam)) {
 			if (wParam == VK_ESCAPE)
 				PostMessage(hwnd, WM_CLOSE, 0, 0);
 		}
@@ -94,7 +95,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdS
 		if (msg.message == WM_QUIT)
 			break;
 		if (active)
-			game->render();
+			game->currentScene()->render(GetTickCount());
 	}
 
 	return (int)msg.wParam;

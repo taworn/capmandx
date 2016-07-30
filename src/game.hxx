@@ -8,38 +8,26 @@ struct CUSTOM_VERTEX {
 	DWORD color;
 };
 
+class Scene;
+
 class Game
 {
+public:
+	static Game* instance() { return singleton; }
+
+	~Game();
+	Game(IDirect3DDevice9 *dev);
+
+	IDirect3DDevice9* getDevice() { return d3dDev; }
+	Scene* currentScene() { return scene; }
+
+	void changeScene(Scene *newScene);
+
 private:
 	IDirect3DDevice9 *d3dDev;
-	ULONGLONG timeStart;
-	int frameCount;
+	Scene *scene;
 
-	float modelX;
-	float modelY;
-	float modelDx;
-	float modelDy;
-	float angle;
-	float angleToPlus;
-	IDirect3DVertexBuffer9 *verticesBuffer;
-
-	void init();
-	void fini();
-	void fps();
-
-public:
-	Game(IDirect3DDevice9 *dev) : d3dDev(dev)
-	{
-		init();
-	}
-
-	~Game()
-	{
-		fini();
-	}
-
-	bool handleKey(HWND hwnd, WPARAM key);
-	void render();
+	static Game *singleton;
 };
 
 #endif // GAME_HXX

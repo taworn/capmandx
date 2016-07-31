@@ -18,10 +18,14 @@ public:
 	~Game();
 	Game(IDirect3DDevice9 *dev);
 
-	IDirect3DDevice9* getDevice() { return d3dDev; }
-	Scene* currentScene() { return scene; }
-
+	bool deviceReset();
 	void changeScene(Scene *newScene);
+
+	IDirect3DDevice9* getDevice() const { return d3dDev; }
+	Scene* currentScene() const { return scene; }
+
+	bool handleKey(HWND hwnd, WPARAM key);
+	void render();
 
 private:
 	IDirect3DDevice9 *d3dDev;

@@ -4,12 +4,11 @@
 class TitleScene : public Scene
 {
 public:
-	virtual ~TitleScene();
 	TitleScene();
 
 protected:
-	void init();
-	void fini();
+	virtual void init();
+	virtual void fini();
 
 private:
 	TitleScene(const TitleScene&);

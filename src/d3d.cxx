@@ -5,12 +5,13 @@
 bool active = false;
 IDirect3D9 *d3d = NULL;
 IDirect3DDevice9 *d3dDev = NULL;
+D3DPRESENT_PARAMETERS d3dpp = { 0 };
 
 bool D3DInit(HWND hwnd)
 {
 	d3d = Direct3DCreate9(D3D_SDK_VERSION);
 
-	D3DPRESENT_PARAMETERS d3dpp = { 0 };
+	d3dpp = { 0 };
 	d3dpp.hDeviceWindow = hwnd;
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
 	d3dpp.Windowed = TRUE;
@@ -22,6 +23,16 @@ bool D3DInit(HWND hwnd)
 
 	d3dDev->SetRenderState(D3DRS_LIGHTING, FALSE);
 	return true;
+}
+
+bool D3DReset()
+{
+	HRESULT hr = d3dDev->Reset(&d3dpp);
+	if (SUCCEEDED(hr)) {
+		d3dDev->SetRenderState(D3DRS_LIGHTING, FALSE);
+		return true;
+	}
+	return false;
 }
 
 void D3DUninit()

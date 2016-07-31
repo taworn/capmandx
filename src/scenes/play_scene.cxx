@@ -8,11 +8,6 @@
 #include "play_scene.hxx"
 #include "title_scene.hxx"
 
-PlayScene::~PlayScene()
-{
-	fini();
-}
-
 PlayScene::PlayScene()
 	: Scene()
 	, modelX(0.0f), modelY(0.0f), modelDx(0.0f), modelDy(0.0f)

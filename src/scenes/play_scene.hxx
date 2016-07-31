@@ -4,12 +4,11 @@
 class PlayScene : public Scene
 {
 public:
-	virtual ~PlayScene();
 	PlayScene();
 
 protected:
-	void init();
-	void fini();
+	virtual void init();
+	virtual void fini();
 
 private:
 	float modelX;

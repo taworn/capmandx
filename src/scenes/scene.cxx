@@ -4,9 +4,25 @@
 
 Scene::~Scene()
 {
+	fini();
 }
 
 Scene::Scene()
+{
+	init();
+}
+
+void Scene::reset()
+{
+	fini();
+	init();
+}
+
+void Scene::init()
+{
+}
+
+void Scene::fini()
 {
 }
 

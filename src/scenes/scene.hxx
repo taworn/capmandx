@@ -7,7 +7,12 @@ public:
 	virtual ~Scene();
 	Scene();
 
+	virtual void reset();
+
 protected:
+	virtual void init();
+	virtual void fini();
+
 	void fps(ULONGLONG timeCurrent);
 
 private:

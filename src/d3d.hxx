@@ -8,8 +8,10 @@ extern "C" {
 extern bool active;
 extern IDirect3D9 *d3d;
 extern IDirect3DDevice9 *d3dDev;
+extern D3DPRESENT_PARAMETERS d3dpp;
 
 bool D3DInit(HWND hwnd);
+bool D3DReset();
 void D3DUninit();
 
 #ifdef __cplusplus

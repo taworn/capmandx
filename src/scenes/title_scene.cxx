@@ -8,11 +8,6 @@
 #include "title_scene.hxx"
 #include "play_scene.hxx"
 
-TitleScene::~TitleScene()
-{
-	fini();
-}
-
 TitleScene::TitleScene() : Scene()
 {
 	init();

@@ -8,6 +8,10 @@ struct CUSTOM_VERTEX {
 	DWORD color;
 };
 
+#define SCENE_DEFAULT 0
+#define SCENE_TITLE 1
+#define SCENE_PLAY 2
+
 class Scene;
 
 class Game
@@ -19,17 +23,19 @@ public:
 	Game(IDirect3DDevice9 *dev);
 
 	bool deviceReset();
-	void changeScene(Scene *newScene);
+	void changeScene(int sceneId);
+	bool handleKey(HWND hwnd, WPARAM key);
+	void render();
 
 	IDirect3DDevice9* getDevice() const { return d3dDev; }
 	Scene* currentScene() const { return scene; }
 
-	bool handleKey(HWND hwnd, WPARAM key);
-	void render();
-
 private:
 	IDirect3DDevice9 *d3dDev;
 	Scene *scene;
+
+	void init();
+	void fini();
 
 	static Game *singleton;
 };

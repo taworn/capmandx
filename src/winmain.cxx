@@ -1,9 +1,10 @@
 #include <windows.h>
+#include <assert.h>
 #include <boost/log/trivial.hpp>
 #include <d3d9.h>
+#include <d3dx9.h>
 #include "d3d.hxx"
 #include "game.hxx"
-#include "scenes/scene.hxx"
 
 static Game *game = NULL;
 

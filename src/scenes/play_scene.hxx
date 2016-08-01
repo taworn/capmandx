@@ -4,11 +4,14 @@
 class PlayScene : public Scene
 {
 public:
+	virtual ~PlayScene();
 	PlayScene();
 
+	virtual void reset();
+
 protected:
-	virtual void init();
-	virtual void fini();
+	void init();
+	void fini();
 
 private:
 	float modelX;
@@ -19,12 +22,9 @@ private:
 	float angleToPlus;
 	IDirect3DVertexBuffer9 *verticesBuffer;
 
-	PlayScene(const PlayScene&);
-	PlayScene& operator=(const PlayScene&);
-
 public:
 	virtual bool handleKey(HWND hwnd, WPARAM key);
-	virtual void render(ULONGLONG timeCurrent);
+	virtual void render();
 };
 
 #endif // SCENES_PLAY_SCENE_HXX

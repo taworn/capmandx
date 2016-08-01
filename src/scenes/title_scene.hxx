@@ -4,19 +4,22 @@
 class TitleScene : public Scene
 {
 public:
+	virtual ~TitleScene();
 	TitleScene();
 
+	virtual void reset();
+
 protected:
-	virtual void init();
-	virtual void fini();
+	void init();
+	void fini();
 
 private:
-	TitleScene(const TitleScene&);
-	TitleScene& operator=(const TitleScene&);
+	ID3DXFont *titleFont;
+	ID3DXFont *normalFont;
 
 public:
 	virtual bool handleKey(HWND hwnd, WPARAM key);
-	virtual void render(ULONGLONG timeCurrent);
+	virtual void render();
 };
 
 #endif // SCENES_TITLE_SCENE_HXX

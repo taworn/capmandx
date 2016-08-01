@@ -3,10 +3,14 @@
 #include <boost/log/trivial.hpp>
 #include <d3d9.h>
 #include <d3dx9.h>
-#include "../game.hxx"
 #include "scene.hxx"
 #include "play_scene.hxx"
-#include "title_scene.hxx"
+#include "../game.hxx"
+
+PlayScene::~PlayScene()
+{
+	fini();
+}
 
 PlayScene::PlayScene()
 	: Scene()
@@ -17,10 +21,18 @@ PlayScene::PlayScene()
 	init();
 }
 
+void PlayScene::reset()
+{
+	fini();
+	Scene::fini();
+	Scene::init();
+	init();
+}
+
 void PlayScene::init()
 {
 	// initializes with a triangle buffer
-	Game::instance()->getDevice()->CreateVertexBuffer(3 * sizeof(CUSTOM_VERTEX), 0, CUSTOM_FVF, D3DPOOL_MANAGED, &verticesBuffer, NULL);
+	getDevice()->CreateVertexBuffer(3 * sizeof(CUSTOM_VERTEX), 0, CUSTOM_FVF, D3DPOOL_MANAGED, &verticesBuffer, NULL);
 	assert(verticesBuffer);
 
 	// copies vertices to the buffer
@@ -53,7 +65,7 @@ bool PlayScene::handleKey(HWND hwnd, WPARAM key)
 	else if (key == VK_RETURN) {
 		// ENTER
 		OutputDebugStringW(L"ENTER keydown\n");
-		Game::instance()->changeScene(new TitleScene());
+		Game::instance()->changeScene(SCENE_TITLE);
 		return true;
 	}
 	else if (key == 0x57 || key == VK_UP) {
@@ -83,12 +95,12 @@ bool PlayScene::handleKey(HWND hwnd, WPARAM key)
 	return false;
 }
 
-void PlayScene::render(ULONGLONG timeCurrent)
+void PlayScene::render()
 {
-	IDirect3DDevice9 *d3dDev = Game::instance()->getDevice();
-	d3dDev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 0.0f, 0);
-	d3dDev->BeginScene();
-	d3dDev->SetFVF(CUSTOM_FVF);
+	IDirect3DDevice9 *device = getDevice();
+	device->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 0.0f, 0);
+	device->BeginScene();
+	device->SetFVF(CUSTOM_FVF);
 
 	// translating
 	D3DXMATRIX matrixTranslate;
@@ -121,14 +133,16 @@ void PlayScene::render(ULONGLONG timeCurrent)
 		10.0f);            // the far view-plane
 
 	// draws vertex buffer to display
-	d3dDev->SetTransform(D3DTS_WORLD, &(matrixRotateY * matrixTranslate));
-	d3dDev->SetTransform(D3DTS_VIEW, &matrixView);
-	d3dDev->SetTransform(D3DTS_PROJECTION, &matrixProjection);
-	d3dDev->SetStreamSource(0, verticesBuffer, 0, sizeof(CUSTOM_VERTEX));
-	d3dDev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 1);
+	device->SetTransform(D3DTS_WORLD, &(matrixRotateY * matrixTranslate));
+	device->SetTransform(D3DTS_VIEW, &matrixView);
+	device->SetTransform(D3DTS_PROJECTION, &matrixProjection);
+	device->SetStreamSource(0, verticesBuffer, 0, sizeof(CUSTOM_VERTEX));
+	device->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 1);
 
-	fps(timeCurrent);
-	d3dDev->EndScene();
-	d3dDev->Present(NULL, NULL, NULL, NULL);
+	computeFPS();
+	drawFPS();
+
+	device->EndScene();
+	device->Present(NULL, NULL, NULL, NULL);
 }
 

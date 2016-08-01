@@ -10,21 +10,30 @@ public:
 	virtual void reset();
 
 protected:
-	virtual void init();
-	virtual void fini();
+	void init();
+	void fini();
 
-	void fps(ULONGLONG timeCurrent);
+	void computeFPS();
+	void drawFPS();
+
+	IDirect3DDevice9* getDevice() const { return device; }
+	RECT getScreenRect() const { return screenRect; }
+	ULONGLONG getFPS() const { return fps; }
 
 private:
-	ULONGLONG timeStart;
+	IDirect3DDevice9 *device;
+	RECT screenRect;
 	int frameCount;
+	ULONGLONG fps;
+	ULONGLONG timeStart;
+	ID3DXFont *fpsFont;
 
 	Scene(const Scene&);
 	Scene& operator=(const Scene&);
 
 public:
-	virtual bool handleKey(HWND hwnd, WPARAM key) = 0;
-	virtual void render(ULONGLONG timeCurrent) = 0;
+	virtual bool handleKey(HWND hwnd, WPARAM key);
+	virtual void render();
 };
 
 #endif // SCENES_SCENE_HXX

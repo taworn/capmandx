@@ -28,14 +28,17 @@ public:
 	void render();
 
 	IDirect3DDevice9* getDevice() const { return d3dDev; }
+	ID3DXFont* getSmallFont() { return smallFont; }
+	ID3DXFont* getNormalFont() { return normalFont; }
+	ID3DXFont* getBigFont() { return bigFont; }
 	Scene* currentScene() const { return scene; }
 
 private:
 	IDirect3DDevice9 *d3dDev;
+	ID3DXFont *smallFont;
+	ID3DXFont *normalFont;
+	ID3DXFont *bigFont;
 	Scene *scene;
-
-	void init();
-	void fini();
 
 	static Game *singleton;
 };

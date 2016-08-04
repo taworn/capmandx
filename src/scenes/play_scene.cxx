@@ -3,9 +3,9 @@
 #include <boost/log/trivial.hpp>
 #include <d3d9.h>
 #include <d3dx9.h>
+#include "../game.hxx"
 #include "scene.hxx"
 #include "play_scene.hxx"
-#include "../game.hxx"
 
 PlayScene::~PlayScene()
 {
@@ -140,8 +140,6 @@ void PlayScene::render()
 	device->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 1);
 
 	computeFPS();
-	drawFPS();
-
 	device->EndScene();
 	device->Present(NULL, NULL, NULL, NULL);
 }

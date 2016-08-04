@@ -14,19 +14,23 @@ protected:
 	void fini();
 
 	void computeFPS();
-	void drawFPS();
 
 	IDirect3DDevice9* getDevice() const { return device; }
 	RECT getScreenRect() const { return screenRect; }
-	ULONGLONG getFPS() const { return fps; }
+	ID3DXFont* getSmallFont() { return smallFont; }
+	ID3DXFont* getNormalFont() { return normalFont; }
+	ID3DXFont* getBigFont() { return bigFont; }
+	int getFPS() const { return fps; }
 
 private:
 	IDirect3DDevice9 *device;
 	RECT screenRect;
+	ID3DXFont *smallFont;
+	ID3DXFont *normalFont;
+	ID3DXFont *bigFont;
+	int fps;
 	int frameCount;
-	ULONGLONG fps;
 	ULONGLONG timeStart;
-	ID3DXFont *fpsFont;
 
 	Scene(const Scene&);
 	Scene& operator=(const Scene&);

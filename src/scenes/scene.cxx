@@ -3,22 +3,29 @@
 #include <boost/log/trivial.hpp>
 #include <d3d9.h>
 #include <d3dx9.h>
-#include "scene.hxx"
 #include "../game.hxx"
+#include "scene.hxx"
 
 Scene::~Scene()
 {
 	fini();
 }
 
-Scene::Scene() : device(), screenRect(), frameCount(0), fps(0), timeStart(0), fpsFont()
+Scene::Scene()
+	: device(), screenRect()
+	, smallFont(), normalFont(), bigFont()
+	, fps(0), frameCount(0), timeStart(0)
 {
 	Game *game = Game::instance();
 	device = game->getDevice();
 
 	D3DDEVICE_CREATION_PARAMETERS cp;
-	device->GetCreationParameters(&cp);
+	getDevice()->GetCreationParameters(&cp);
 	GetWindowRect(cp.hFocusWindow, &screenRect);
+
+	smallFont = game->getSmallFont();
+	normalFont = game->getNormalFont();
+	bigFont = game->getBigFont();
 
 	timeStart = GetTickCount();
 
@@ -33,15 +40,10 @@ void Scene::reset()
 
 void Scene::init()
 {
-	D3DXCreateFont(getDevice(), 24, 0, FW_NORMAL, 1, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, TEXT("Arial"), &fpsFont);
 }
 
 void Scene::fini()
 {
-	if (fpsFont != NULL) {
-		fpsFont->Release();
-		fpsFont = NULL;
-	}
 }
 
 void Scene::computeFPS()
@@ -50,22 +52,20 @@ void Scene::computeFPS()
 	ULONGLONG timeCurrent = GetTickCount();
 	ULONGLONG timeUsage = timeCurrent - timeStart;
 	if (timeUsage > 1000) {
-		fps = frameCount * 1000 / timeUsage;
+		fps = (int)(frameCount * 1000 / timeUsage);
 		timeStart = timeCurrent;
 		frameCount = 0;
-		BOOST_LOG_TRIVIAL(trace) << "FPS: " << fps;
-		wchar_t buffer[64];
-		wsprintf(buffer, L"FPS: %ld\n", fps);
-		OutputDebugStringW(buffer);
-	}
-}
 
-void Scene::drawFPS()
-{
-	RECT rc = getScreenRect();
+		wchar_t buffer[64];
+		wsprintf(buffer, L"FPS: %d\n", fps);
+		OutputDebugStringW(buffer);
+		BOOST_LOG_TRIVIAL(trace) << "FPS: " << fps;
+	}
+
 	wchar_t buffer[64];
-	wsprintf(buffer, L"%ld", getFPS());
-	fpsFont->DrawText(NULL, buffer, -1, &rc, DT_RIGHT | DT_BOTTOM, D3DCOLOR_XRGB(0xFF, 0xFF, 0xFF));
+	wsprintf(buffer, L"%d\n", fps);
+	RECT rc = getScreenRect();
+	getSmallFont()->DrawText(NULL, buffer, -1, &rc, DT_RIGHT | DT_BOTTOM, D3DCOLOR_ARGB(0x80, 0xFF, 0xFF, 0xFF));
 }
 
 bool Scene::handleKey(HWND hwnd, WPARAM key)
@@ -81,8 +81,6 @@ void Scene::render()
 	device->SetFVF(CUSTOM_FVF);
 
 	computeFPS();
-	drawFPS();
-
 	device->EndScene();
 	device->Present(NULL, NULL, NULL, NULL);
 }

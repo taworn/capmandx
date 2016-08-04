@@ -15,7 +15,6 @@ protected:
 
 private:
 	ID3DXFont *titleFont;
-	ID3DXFont *normalFont;
 
 public:
 	virtual bool handleKey(HWND hwnd, WPARAM key);

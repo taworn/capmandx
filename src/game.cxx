@@ -1,3 +1,7 @@
+/**
+ * @file game.cxx
+ * @desc Game engine module.
+ */
 #include <windows.h>
 #include <assert.h>
 #include <boost/log/trivial.hpp>
@@ -31,7 +35,7 @@ Game::~Game()
 	singleton = NULL;
 }
 
-Game::Game(IDirect3DDevice9 *dev) 
+Game::Game(IDirect3DDevice9 *dev)
 	: d3dDev(dev)
 	, smallFont(), normalFont(), bigFont()
 	, scene()

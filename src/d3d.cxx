@@ -1,3 +1,7 @@
+/**
+ * @file d3d.cxx
+ * @desc D3D module.
+ */
 #include <windows.h>
 #include <d3d9.h>
 #include "d3d.hxx"

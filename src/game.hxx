@@ -6,10 +6,16 @@
 #define GAME_HXX
 
 #define CUSTOM_FVF (D3DFVF_XYZ | D3DFVF_DIFFUSE)
-
 struct CUSTOM_VERTEX {
 	float x, y, z;
 	DWORD color;
+};
+
+#define TEXTURE_FVF (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1)
+struct TEXTURE_VERTEX {
+	float x, y, z;
+	DWORD color;
+	float u, v;
 };
 
 #define SCENE_DEFAULT 0

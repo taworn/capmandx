@@ -42,19 +42,11 @@ protected:
 	 */
 	void computeFPS();
 
-	IDirect3DDevice9* getDevice() const { return device; }
 	RECT getScreenRect() const { return screenRect; }
-	ID3DXFont* getSmallFont() { return smallFont; }
-	ID3DXFont* getNormalFont() { return normalFont; }
-	ID3DXFont* getBigFont() { return bigFont; }
 	int getFPS() const { return fps; }
 
 private:
-	IDirect3DDevice9 *device;
 	RECT screenRect;
-	ID3DXFont *smallFont;
-	ID3DXFont *normalFont;
-	ID3DXFont *bigFont;
 	int fps;
 	int frameCount;
 	ULONGLONG timeStart;

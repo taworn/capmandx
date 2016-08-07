@@ -36,7 +36,7 @@ void PlayScene::reset()
 void PlayScene::init()
 {
 	// initializes with a triangle buffer
-	getDevice()->CreateVertexBuffer(3 * sizeof(CUSTOM_VERTEX), 0, CUSTOM_FVF, D3DPOOL_MANAGED, &verticesBuffer, NULL);
+	Game::instance()->getDevice()->CreateVertexBuffer(3 * sizeof(CUSTOM_VERTEX), 0, CUSTOM_FVF, D3DPOOL_MANAGED, &verticesBuffer, NULL);
 	assert(verticesBuffer);
 
 	// copies vertices to the buffer
@@ -101,7 +101,8 @@ bool PlayScene::handleKey(HWND hwnd, WPARAM key)
 
 void PlayScene::render()
 {
-	IDirect3DDevice9 *device = getDevice();
+	Game *game = Game::instance();
+	IDirect3DDevice9 *device = game->getDevice();
 	device->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 0.0f, 0);
 	device->BeginScene();
 	device->SetFVF(CUSTOM_FVF);

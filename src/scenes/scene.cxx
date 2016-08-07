@@ -16,20 +16,14 @@ Scene::~Scene()
 }
 
 Scene::Scene()
-	: device(), screenRect()
-	, smallFont(), normalFont(), bigFont()
+	: screenRect()
 	, fps(0), frameCount(0), timeStart(0)
 {
 	Game *game = Game::instance();
-	device = game->getDevice();
 
 	D3DDEVICE_CREATION_PARAMETERS cp;
-	getDevice()->GetCreationParameters(&cp);
+	game->getDevice()->GetCreationParameters(&cp);
 	GetWindowRect(cp.hFocusWindow, &screenRect);
-
-	smallFont = game->getSmallFont();
-	normalFont = game->getNormalFont();
-	bigFont = game->getBigFont();
 
 	timeStart = GetTickCount();
 
@@ -69,7 +63,7 @@ void Scene::computeFPS()
 	wchar_t buffer[64];
 	wsprintf(buffer, L"%d\n", fps);
 	RECT rc = getScreenRect();
-	getSmallFont()->DrawText(NULL, buffer, -1, &rc, DT_RIGHT | DT_BOTTOM, D3DCOLOR_ARGB(0x80, 0xFF, 0xFF, 0xFF));
+	Game::instance()->getSmallFont()->DrawText(NULL, buffer, -1, &rc, DT_RIGHT | DT_BOTTOM, D3DCOLOR_ARGB(0x80, 0xFF, 0xFF, 0xFF));
 }
 
 bool Scene::handleKey(HWND hwnd, WPARAM key)
@@ -79,7 +73,8 @@ bool Scene::handleKey(HWND hwnd, WPARAM key)
 
 void Scene::render()
 {
-	IDirect3DDevice9 *device = getDevice();
+	Game *game = Game::instance();
+	IDirect3DDevice9 *device = game->getDevice();
 	device->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 0.0f, 0);
 	device->BeginScene();
 	device->SetFVF(CUSTOM_FVF);

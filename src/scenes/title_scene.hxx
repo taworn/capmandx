@@ -22,6 +22,8 @@ protected:
 
 private:
 	ID3DXFont *titleFont;
+	IDirect3DTexture9 *image;
+	IDirect3DVertexBuffer9 *vertexBuffer;
 
 public:
 	virtual bool handleKey(HWND hwnd, WPARAM key);

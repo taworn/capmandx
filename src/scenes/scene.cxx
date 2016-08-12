@@ -12,7 +12,6 @@
 
 Scene::~Scene()
 {
-	fini();
 }
 
 Scene::Scene()
@@ -26,14 +25,6 @@ Scene::Scene()
 	GetWindowRect(cp.hFocusWindow, &screenRect);
 
 	timeStart = GetTickCount();
-
-	init();
-}
-
-void Scene::reset()
-{
-	fini();
-	init();
 }
 
 void Scene::init()
@@ -77,7 +68,6 @@ void Scene::render()
 	IDirect3DDevice9 *device = game->getDevice();
 	device->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 0.0f, 0);
 	device->BeginScene();
-	device->SetFVF(CUSTOM_FVF);
 
 	computeFPS();
 	device->EndScene();

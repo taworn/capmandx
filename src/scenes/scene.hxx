@@ -22,21 +22,16 @@ public:
 	Scene();
 
 	/**
-	 * Resets this scene.
-	 */
-	virtual void reset();
-
-protected:
-	/**
 	 * Initializes a game scene.
 	 */
-	void init();
+	virtual void init();
 
 	/**
 	 * Uninitializes a game scene.
 	 */
-	void fini();
+	virtual void fini();
 
+protected:
 	/**
 	 * Computes current frames per second.
 	 */

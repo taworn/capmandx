@@ -14,20 +14,15 @@ public:
 	virtual ~PlayScene();
 	PlayScene();
 
-	virtual void reset();
-
-protected:
-	void init();
-	void fini();
+	virtual void init();
+	virtual void fini();
 
 private:
+	IDirect3DTexture9 *image;
 	float modelX;
 	float modelY;
 	float modelDx;
 	float modelDy;
-	float angle;
-	float angleToPlus;
-	IDirect3DVertexBuffer9 *verticesBuffer;
 
 public:
 	virtual bool handleKey(HWND hwnd, WPARAM key);

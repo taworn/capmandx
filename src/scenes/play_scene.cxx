@@ -18,44 +18,22 @@ PlayScene::~PlayScene()
 
 PlayScene::PlayScene()
 	: Scene()
+	, image()
 	, modelX(0.0f), modelY(0.0f), modelDx(0.0f), modelDy(0.0f)
-	, angle(0.0f), angleToPlus(3.0f)
-	, verticesBuffer(NULL)
 {
-	init();
-}
-
-void PlayScene::reset()
-{
-	fini();
-	Scene::fini();
-	Scene::init();
 	init();
 }
 
 void PlayScene::init()
 {
-	// initializes with a triangle buffer
-	Game::instance()->getDevice()->CreateVertexBuffer(3 * sizeof(CUSTOM_VERTEX), 0, CUSTOM_FVF, D3DPOOL_MANAGED, &verticesBuffer, NULL);
-	assert(verticesBuffer);
-
-	// copies vertices to the buffer
-	CUSTOM_VERTEX verticesData[] = {
-	    { -1.0f, -1.0f, 0.0f, D3DCOLOR_XRGB(255, 0, 0), },
-	    { 0.0f, 1.0f, 0.0f, D3DCOLOR_XRGB(0, 255, 0), },
-	    { 1.0f, -1.0f, 0.0f, D3DCOLOR_XRGB(0, 0, 255), },
-	};
-	void *p;
-	verticesBuffer->Lock(0, 0, (void**)&p, 0);
-	memcpy(p, verticesData, sizeof(verticesData));
-	verticesBuffer->Unlock();
+	D3DXCreateTextureFromFile(Game::instance()->getDevice(), L"res\\a.png", &image);
 }
 
 void PlayScene::fini()
 {
-	if (verticesBuffer != NULL) {
-		verticesBuffer->Release();
-		verticesBuffer = NULL;
+	if (image != NULL) {
+		image->Release();
+		image = NULL;
 	}
 }
 
@@ -75,25 +53,29 @@ bool PlayScene::handleKey(HWND hwnd, WPARAM key)
 	else if (key == 0x57 || key == VK_UP) {
 		// up
 		OutputDebugStringW(L"W -or- UP keydown\n");
-		modelDy = -0.1f;
+		modelDx = 0.0f;
+		modelDy = 0.05f;
 		return true;
 	}
 	else if (key == 0x53 || key == VK_DOWN) {
 		// down
 		OutputDebugStringW(L"S -or- DOWN keydown\n");
-		modelDy = 0.1f;
+		modelDx = 0.0f;
+		modelDy = -0.05f;
 		return true;
 	}
 	else if (key == 0x41 || key == VK_LEFT) {
 		// left
 		OutputDebugStringW(L"A -or- LEFT keydown\n");
-		modelDx = -0.1f;
+		modelDx = -0.05f;
+		modelDy = 0.0f;
 		return true;
 	}
 	else if (key == 0x44 || key == VK_RIGHT) {
 		// right
 		OutputDebugStringW(L"D -or- RIGHT keydown\n");
-		modelDx = 0.1f;
+		modelDx = 0.05f;
+		modelDy = 0.0f;
 		return true;
 	}
 	return false;
@@ -105,44 +87,57 @@ void PlayScene::render()
 	IDirect3DDevice9 *device = game->getDevice();
 	device->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 0.0f, 0);
 	device->BeginScene();
-	device->SetFVF(CUSTOM_FVF);
 
-	// translating
-	D3DXMATRIX matrixTranslate;
-	D3DXMatrixTranslation(&matrixTranslate, modelX + modelDx, modelY + modelDy, 0);
-	modelX += modelDx;
-	modelY += modelDy;
-	modelDx = 0.0f;
-	modelDy = 0.0f;
-
-	// rotating
-	D3DXMATRIX matrixRotateY;
-	D3DXMatrixRotationY(&matrixRotateY, D3DXToRadian(angle));
-	angle += angleToPlus;
-	if (angle > 89.0f || angle < -89.0f)
-		angleToPlus = -angleToPlus;
-
-	// viewing
+	// combining projecting and viewing matrices
+	D3DXMATRIX matrixProjection;
+	D3DXMatrixOrthoLH(&matrixProjection,
+		2.0f, 2.0f,    // width & height
+		1.0f, 25.0f);  // near & far view-plane
 	D3DXMATRIX matrixView;
 	D3DXMatrixLookAtLH(&matrixView,
 		&D3DXVECTOR3(0.0f, 0.0f, -3.0f),  // the camera position
 		&D3DXVECTOR3(0.0f, 0.0f, 0.0f),   // the look-at position
 		&D3DXVECTOR3(0.0f, 1.0f, 0.0f));  // the up direction
-
-	// projecting
-	D3DXMATRIX matrixProjection;
-	D3DXMatrixPerspectiveFovLH(&matrixProjection,
-		D3DXToRadian(45),  // the horizontal field of view
-		1.3333f,           // aspect ratio
-		1.0f,              // the near view-plane
-		10.0f);            // the far view-plane
-
-	// draws vertex buffer to display
-	device->SetTransform(D3DTS_WORLD, &(matrixRotateY * matrixTranslate));
 	device->SetTransform(D3DTS_VIEW, &matrixView);
 	device->SetTransform(D3DTS_PROJECTION, &matrixProjection);
-	device->SetStreamSource(0, verticesBuffer, 0, sizeof(CUSTOM_VERTEX));
-	device->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 1);
+
+	// scaling and translating
+	D3DXMATRIX matrixScale;
+	D3DXMatrixScaling(&matrixScale, 0.1f, 0.1f, 1.0f);
+	D3DXMATRIX matrixTranslate;
+	D3DXMatrixTranslation(&matrixTranslate, modelX, modelY, 0);
+	if (modelDx > 0.0f && modelX < 0.75f)
+		modelX += modelDx;
+	else if (modelDx < 0.0f && modelX > -0.75f)
+		modelX += modelDx;
+	if (modelDy > 0.0f && modelY < 0.75f)
+		modelY += modelDy;
+	else if (modelDy < 0.0f && modelY > -0.75f)
+		modelY += modelDy;
+	device->SetTransform(D3DTS_WORLD, &(matrixScale * matrixTranslate));
+	Game::instance()->draw(image);
+
+	D3DXMatrixScaling(&matrixScale, 0.05f, 0.05f, 0.05f);
+	for (int i = -9; i <= 9; i++) {
+		D3DXMatrixTranslation(&matrixTranslate, 0.1f * i, 0.9f, 0.0f);
+		device->SetTransform(D3DTS_WORLD, &(matrixScale * matrixTranslate));
+		Game::instance()->draw(image);
+	}
+	for (int i = -9; i <= 9; i++) {
+		D3DXMatrixTranslation(&matrixTranslate, 0.1f * i, -0.9f, 0.0f);
+		device->SetTransform(D3DTS_WORLD, &(matrixScale * matrixTranslate));
+		Game::instance()->draw(image);
+	}
+	for (int i = -9; i <= 9; i++) {
+		D3DXMatrixTranslation(&matrixTranslate, 0.9f, 0.1f * i, 0.0f);
+		device->SetTransform(D3DTS_WORLD, &(matrixScale * matrixTranslate));
+		Game::instance()->draw(image);
+	}
+	for (int i = -9; i <= 9; i++) {
+		D3DXMatrixTranslation(&matrixTranslate, -0.9f, 0.1f * i, 0.0f);
+		device->SetTransform(D3DTS_WORLD, &(matrixScale * matrixTranslate));
+		Game::instance()->draw(image);
+	}
 
 	computeFPS();
 	device->EndScene();

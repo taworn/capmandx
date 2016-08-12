@@ -26,6 +26,10 @@ bool D3DInit(HWND hwnd)
 	}
 
 	d3dDev->SetRenderState(D3DRS_LIGHTING, FALSE);
+	d3dDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	//d3dDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//d3dDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
 	return true;
 }
 
@@ -34,6 +38,7 @@ bool D3DReset()
 	HRESULT hr = d3dDev->Reset(&d3dpp);
 	if (SUCCEEDED(hr)) {
 		d3dDev->SetRenderState(D3DRS_LIGHTING, FALSE);
+		d3dDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 		return true;
 	}
 	return false;

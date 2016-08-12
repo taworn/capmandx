@@ -5,19 +5,6 @@
 #ifndef GAME_HXX
 #define GAME_HXX
 
-#define CUSTOM_FVF (D3DFVF_XYZ | D3DFVF_DIFFUSE)
-struct CUSTOM_VERTEX {
-	float x, y, z;
-	DWORD color;
-};
-
-#define TEXTURE_FVF (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1)
-struct TEXTURE_VERTEX {
-	float x, y, z;
-	DWORD color;
-	float u, v;
-};
-
 #define SCENE_DEFAULT 0
 #define SCENE_TITLE 1
 #define SCENE_PLAY 2
@@ -43,11 +30,6 @@ public:
 	Game(IDirect3DDevice9 *dev);
 
 	/**
-	 * Resets current scene.
-	 */
-	bool deviceReset();
-
-	/**
 	 * Changes the new scene.
 	 * @param sceneId A scene identifier, look at SCENE_*.
 	 */
@@ -63,6 +45,11 @@ public:
 	 */
 	void render();
 
+	/**
+	 * Draws texture.
+	 */
+	void draw(IDirect3DTexture9 *image);
+
 	IDirect3DDevice9* getDevice() const { return d3dDev; }
 	ID3DXFont* getSmallFont() { return smallFont; }
 	ID3DXFont* getNormalFont() { return normalFont; }
@@ -70,11 +57,27 @@ public:
 	Scene* currentScene() const { return scene; }
 
 private:
+	struct TEXTURE_VERTEX {
+		float x, y, z;
+		float u, v;
+	};
+
 	IDirect3DDevice9 *d3dDev;
 	ID3DXFont *smallFont;
 	ID3DXFont *normalFont;
 	ID3DXFont *bigFont;
+	IDirect3DVertexBuffer9 *textureVerticesBuffer;
 	Scene *scene;
+
+	/**
+	 * Initializes game engine.
+	 */
+	void init();
+
+	/**
+	 * Uninitializes game engine.
+	 */
+	void fini();
 
 	static Game *singleton;
 };

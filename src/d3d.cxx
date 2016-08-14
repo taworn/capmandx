@@ -11,6 +11,15 @@ IDirect3D9 *d3d = NULL;
 IDirect3DDevice9 *d3dDev = NULL;
 D3DPRESENT_PARAMETERS d3dpp = { 0 };
 
+static void D3DReinit()
+{
+	d3dDev->SetRenderState(D3DRS_LIGHTING, FALSE);
+	d3dDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	d3dDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);
+	d3dDev->SetRenderState(D3DRS_ALPHAREF, (DWORD)64);
+	d3dDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+}
+
 bool D3DInit(HWND hwnd)
 {
 	d3d = Direct3DCreate9(D3D_SDK_VERSION);
@@ -25,11 +34,7 @@ bool D3DInit(HWND hwnd)
 		return false;
 	}
 
-	d3dDev->SetRenderState(D3DRS_LIGHTING, FALSE);
-	d3dDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-	//d3dDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	//d3dDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
+	D3DReinit();
 	return true;
 }
 
@@ -37,8 +42,7 @@ bool D3DReset()
 {
 	HRESULT hr = d3dDev->Reset(&d3dpp);
 	if (SUCCEEDED(hr)) {
-		d3dDev->SetRenderState(D3DRS_LIGHTING, FALSE);
-		d3dDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+		D3DReinit();
 		return true;
 	}
 	return false;

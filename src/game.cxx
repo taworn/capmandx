@@ -81,6 +81,9 @@ void Game::draw(IDirect3DTexture9 *image)
 	device->SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
 	device->SetStreamSource(0, textureVerticesBuffer, 0, sizeof(TEXTURE_VERTEX));
 	device->SetTexture(0, image);
+	device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 	device->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 }
 

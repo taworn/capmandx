@@ -39,6 +39,9 @@
     <ClCompile Include="src\scenes\play_scene.cxx">
       <Filter>Source Files\scenes</Filter>
     </ClCompile>
+    <ClCompile Include="src\animation.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\d3d.hxx">
@@ -55,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="src\scenes\play_scene.hxx">
       <Filter>Header Files\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\animation.hxx">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

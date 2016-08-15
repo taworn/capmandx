@@ -5,6 +5,8 @@
 #ifndef GAME_HXX
 #define GAME_HXX
 
+#include "animation.hxx"
+
 #define SCENE_DEFAULT 0
 #define SCENE_TITLE 1
 #define SCENE_PLAY 2

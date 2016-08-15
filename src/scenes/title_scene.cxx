@@ -16,7 +16,7 @@ TitleScene::~TitleScene()
 	fini();
 }
 
-TitleScene::TitleScene() : Scene(), titleFont()
+TitleScene::TitleScene() : Scene(), titleFont(), anim(), modelX(0.0f)
 {
 	init();
 }
@@ -25,14 +25,16 @@ void TitleScene::init()
 {
 	IDirect3DDevice9 *device = Game::instance()->getDevice();
 	D3DXCreateFont(device, 128, 0, FW_BOLD, 1, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, TEXT("Times New Roman"), &titleFont);
-	D3DXCreateTextureFromFile(device, L"res\\a.png", &image);
+	anim = new Animation();
+	anim->init(device, L"res\\a.png", 2, 2, 1000);
+	anim->setParameters(0, 2, 500);
 }
 
 void TitleScene::fini()
 {
-	if (image != NULL) {
-		image->Release();
-		image = NULL;
+	if (anim) {
+		delete anim;
+		anim = NULL;
 	}
 	if (titleFont != NULL) {
 		titleFont->Release();
@@ -82,9 +84,12 @@ void TitleScene::render()
 	D3DXMATRIX matrixScale;
 	D3DXMatrixScaling(&matrixScale, 0.2f, 0.2f, 1.0f);
 	D3DXMATRIX matrixTranslate;
-	D3DXMatrixTranslation(&matrixTranslate, 0.0f, -0.2f, 0);
+	D3DXMatrixTranslation(&matrixTranslate, modelX, -0.2f, 0);
+	modelX -= 0.01f;
+	if (modelX < -1.5f)
+		modelX = 1.5f;
 	device->SetTransform(D3DTS_WORLD, &(matrixScale * matrixTranslate));
-	Game::instance()->draw(image);
+	anim->draw(device);
 
 	computeFPS();
 	device->EndScene();

@@ -19,7 +19,8 @@ public:
 
 private:
 	ID3DXFont *titleFont;
-	IDirect3DTexture9 *image;
+	Animation *anim;
+	float modelX;
 
 public:
 	virtual bool handleKey(HWND hwnd, WPARAM key);

@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\animation.cxx" />
     <ClCompile Include="src\d3d.cxx" />
     <ClCompile Include="src\game.cxx" />
     <ClCompile Include="src\scenes\play_scene.cxx" />
@@ -166,6 +167,7 @@
     <ClCompile Include="src\winmain.cxx" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\animation.hxx" />
     <ClInclude Include="src\d3d.hxx" />
     <ClInclude Include="src\game.hxx" />
     <ClInclude Include="src\scenes\play_scene.hxx" />

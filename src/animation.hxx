@@ -5,7 +5,7 @@
 #ifndef ANIMATION_HXX
 #define ANIMATION_HXX
 
-#include <vector>
+class Sprite;
 
 /**
  * An animation class.
@@ -21,17 +21,17 @@ public:
 	/**
 	 * Constructs an animation.
 	 */
-	Animation();
+	Animation(Sprite *s);
 
 	/**
-	 * Initializes an animation with image.
+	 * Adds a playing animation, only 16 set allow.
 	 */
-	bool init(IDirect3DDevice9 *device, const wchar_t *imageFileName, int sliceWidth, int sliceHeight, ULONGLONG timeFrame);
+	void add(int number, int start, int end, int time);
 
 	/**
-	 * Sets parameters.
+	 * Uses a playing animation.
 	 */
-	void setParameters(int spriteStart, int spriteStop, int timeFrame);
+	void use(int number);
 
 	/**
 	 * Draws animation.
@@ -39,14 +39,17 @@ public:
 	void draw(IDirect3DDevice9 *device);
 
 private:
-	IDirect3DVertexBuffer9 *verticesBuffer;
-	IDirect3DTexture9 *texture;
-	std::vector<float> uData;
-	std::vector<float> vData;
-	int sliceWidth, sliceHeight;
-	int spriteStart, spriteStop;
-	int currentIndex;
-	ULONGLONG timeFrame;
+	Sprite *sprite;
+
+	static const int PLAYING_MAX = 16;
+	struct PLAYING {
+		int start;
+		int end;
+		int time;
+	};
+	PLAYING plays[PLAYING_MAX];
+	int currentPlaying;
+	int currentImage;
 	ULONGLONG timeStart;
 
 	Animation(const Animation&);

@@ -18,7 +18,6 @@ PlayScene::~PlayScene()
 
 PlayScene::PlayScene()
 	: Scene()
-	, image()
 	, modelX(0.0f), modelY(0.0f), modelDx(0.0f), modelDy(0.0f)
 {
 	init();
@@ -26,14 +25,44 @@ PlayScene::PlayScene()
 
 void PlayScene::init()
 {
-	D3DXCreateTextureFromFile(Game::instance()->getDevice(), L"res\\a.png", &image);
+	IDirect3DDevice9 *device = Game::instance()->getDevice();
+
+	sprite = new Sprite();
+	sprite->init(device, L".\\res\\pacman.png", 8, 8);
+
+	const int TIME = 300;
+	aniHero = new Animation(sprite);
+	aniHero->add(0, 0, 2, TIME);
+	aniHero->add(1, 2, 4, TIME);
+	aniHero->add(2, 4, 6, TIME);
+	aniHero->add(3, 6, 8, TIME);
+	aniHero->use(0);
+
+	for (int i = 0; i < 4; i++) {
+		aniDivoes[i] = new Animation(sprite);
+		aniDivoes[i]->add(0, (i + 1) * 8 + 0, (i + 1) * 8 + 2, TIME);
+		aniDivoes[i]->add(1, (i + 1) * 8 + 2, (i + 1) * 8 + 4, TIME);
+		aniDivoes[i]->add(2, (i + 1) * 8 + 4, (i + 1) * 8 + 6, TIME);
+		aniDivoes[i]->add(3, (i + 1) * 8 + 6, (i + 1) * 8 + 8, TIME);
+		aniDivoes[i]->use(0);
+	}
 }
 
 void PlayScene::fini()
 {
-	if (image != NULL) {
-		image->Release();
-		image = NULL;
+	for (int i = 0; i < 4; i++) {
+		if (aniDivoes[i]) {
+			delete aniDivoes[i];
+			aniDivoes[i] = NULL;
+		}
+	}
+	if (aniHero) {
+		delete aniHero;
+		aniHero = NULL;
+	}
+	if (sprite) {
+		delete sprite;
+		sprite = NULL;
 	}
 }
 
@@ -53,28 +82,32 @@ bool PlayScene::handleKey(HWND hwnd, WPARAM key)
 	else if (key == 0x57 || key == VK_UP) {
 		// up
 		OutputDebugStringW(L"W -or- UP keydown\n");
+		aniHero->use(2);
 		modelDx = 0.0f;
-		modelDy = 0.05f;
+		modelDy = 0.01f;
 		return true;
 	}
 	else if (key == 0x53 || key == VK_DOWN) {
 		// down
 		OutputDebugStringW(L"S -or- DOWN keydown\n");
+		aniHero->use(3);
 		modelDx = 0.0f;
-		modelDy = -0.05f;
+		modelDy = -0.01f;
 		return true;
 	}
 	else if (key == 0x41 || key == VK_LEFT) {
 		// left
 		OutputDebugStringW(L"A -or- LEFT keydown\n");
-		modelDx = -0.05f;
+		aniHero->use(0);
+		modelDx = -0.01f;
 		modelDy = 0.0f;
 		return true;
 	}
 	else if (key == 0x44 || key == VK_RIGHT) {
 		// right
 		OutputDebugStringW(L"D -or- RIGHT keydown\n");
-		modelDx = 0.05f;
+		aniHero->use(1);
+		modelDx = 0.01f;
 		modelDy = 0.0f;
 		return true;
 	}
@@ -103,41 +136,35 @@ void PlayScene::render()
 
 	// scaling and translating
 	D3DXMATRIX matrixScale;
-	D3DXMatrixScaling(&matrixScale, 0.1f, 0.1f, 1.0f);
+	D3DXMatrixScaling(&matrixScale, 0.04f, 0.04f, 1.0f);
 	D3DXMATRIX matrixTranslate;
-	D3DXMatrixTranslation(&matrixTranslate, modelX, modelY, 0);
-	if (modelDx > 0.0f && modelX < 0.75f)
+	D3DXMatrixTranslation(&matrixTranslate, modelX * 25, modelY * 25, 0);
+	if (modelDx > 0.0f && modelX < 0.95f)
 		modelX += modelDx;
-	else if (modelDx < 0.0f && modelX > -0.75f)
+	else if (modelDx < 0.0f && modelX > -0.95f)
 		modelX += modelDx;
-	if (modelDy > 0.0f && modelY < 0.75f)
+	if (modelDy > 0.0f && modelY < 0.95f)
 		modelY += modelDy;
-	else if (modelDy < 0.0f && modelY > -0.75f)
+	else if (modelDy < 0.0f && modelY > -0.95f)
 		modelY += modelDy;
-	device->SetTransform(D3DTS_WORLD, &(matrixScale * matrixTranslate));
-	Game::instance()->draw(image);
+	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
+	aniHero->draw(device);
 
-	D3DXMatrixScaling(&matrixScale, 0.05f, 0.05f, 0.05f);
-	for (int i = -9; i <= 9; i++) {
-		D3DXMatrixTranslation(&matrixTranslate, 0.1f * i, 0.9f, 0.0f);
-		device->SetTransform(D3DTS_WORLD, &(matrixScale * matrixTranslate));
-		Game::instance()->draw(image);
-	}
-	for (int i = -9; i <= 9; i++) {
-		D3DXMatrixTranslation(&matrixTranslate, 0.1f * i, -0.9f, 0.0f);
-		device->SetTransform(D3DTS_WORLD, &(matrixScale * matrixTranslate));
-		Game::instance()->draw(image);
-	}
-	for (int i = -9; i <= 9; i++) {
-		D3DXMatrixTranslation(&matrixTranslate, 0.9f, 0.1f * i, 0.0f);
-		device->SetTransform(D3DTS_WORLD, &(matrixScale * matrixTranslate));
-		Game::instance()->draw(image);
-	}
-	for (int i = -9; i <= 9; i++) {
-		D3DXMatrixTranslation(&matrixTranslate, -0.9f, 0.1f * i, 0.0f);
-		device->SetTransform(D3DTS_WORLD, &(matrixScale * matrixTranslate));
-		Game::instance()->draw(image);
-	}
+	D3DXMatrixTranslation(&matrixTranslate, -0.5f * 25, 0.5f * 25, 0);
+	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
+	aniDivoes[0]->draw(device);
+
+	D3DXMatrixTranslation(&matrixTranslate, 0.5f * 25, 0.5f * 25, 0);
+	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
+	aniDivoes[1]->draw(device);
+
+	D3DXMatrixTranslation(&matrixTranslate, -0.5f * 25, -0.5f * 25, 0);
+	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
+	aniDivoes[2]->draw(device);
+
+	D3DXMatrixTranslation(&matrixTranslate, 0.5f * 25, -0.5f * 25, 0);
+	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
+	aniDivoes[3]->draw(device);
 
 	computeFPS();
 	device->EndScene();

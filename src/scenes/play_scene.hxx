@@ -18,7 +18,10 @@ public:
 	virtual void fini();
 
 private:
-	IDirect3DTexture9 *image;
+	Sprite *sprite;
+	Animation *aniHero;
+	Animation *aniDivoes[4];
+	
 	float modelX;
 	float modelY;
 	float modelDx;

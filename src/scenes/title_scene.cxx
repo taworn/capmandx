@@ -16,7 +16,7 @@ TitleScene::~TitleScene()
 	fini();
 }
 
-TitleScene::TitleScene() : Scene(), titleFont(), anim(), modelX(0.0f)
+TitleScene::TitleScene() : Scene(), titleFont(), modelX(0.0f)
 {
 	init();
 }
@@ -24,17 +24,41 @@ TitleScene::TitleScene() : Scene(), titleFont(), anim(), modelX(0.0f)
 void TitleScene::init()
 {
 	IDirect3DDevice9 *device = Game::instance()->getDevice();
+
 	D3DXCreateFont(device, 128, 0, FW_BOLD, 1, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, TEXT("Times New Roman"), &titleFont);
-	anim = new Animation();
-	anim->init(device, L"res\\a.png", 2, 2, 1000);
-	anim->setParameters(0, 2, 500);
+
+	sprite = new Sprite();
+	sprite->init(device, L".\\res\\pacman.png", 8, 8);
+
+	const int TIME = 300;
+	aniHero = new Animation(sprite);
+	aniHero->add(0, 0, 2, TIME);
+	aniHero->add(1, 2, 4, TIME);
+	aniHero->add(2, 4, 6, TIME);
+	aniHero->add(3, 6, 8, TIME);
+	aniHero->use(0);
+
+	aniDivo = new Animation(sprite);
+	aniDivo->add(0, 8, 10, TIME);
+	aniDivo->add(1, 10, 12, TIME);
+	aniDivo->add(2, 12, 14, TIME);
+	aniDivo->add(3, 14, 16, TIME);
+	aniDivo->use(0);
 }
 
 void TitleScene::fini()
 {
-	if (anim) {
-		delete anim;
-		anim = NULL;
+	if (aniDivo) {
+		delete aniDivo;
+		aniDivo = NULL;
+	}
+	if (aniHero) {
+		delete aniHero;
+		aniHero = NULL;
+	}
+	if (sprite) {
+		delete sprite;
+		sprite = NULL;
 	}
 	if (titleFont != NULL) {
 		titleFont->Release();
@@ -80,16 +104,20 @@ void TitleScene::render()
 	device->SetTransform(D3DTS_VIEW, &matrixView);
 	device->SetTransform(D3DTS_PROJECTION, &matrixProjection);
 
-	// scaling and translating
 	D3DXMATRIX matrixScale;
-	D3DXMatrixScaling(&matrixScale, 0.2f, 0.2f, 1.0f);
+	D3DXMatrixScaling(&matrixScale, 0.05f, 0.05f, 1.0f);
 	D3DXMATRIX matrixTranslate;
-	D3DXMatrixTranslation(&matrixTranslate, modelX, -0.2f, 0);
+	D3DXMatrixTranslation(&matrixTranslate, modelX * 20, -0.2f * 20, 0);
+	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
+	aniHero->draw(device);
+
+	D3DXMatrixTranslation(&matrixTranslate, (modelX - 0.25f) * 20, -0.2f * 20, 0);
+	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
+	aniDivo->draw(device);
+
 	modelX -= 0.01f;
-	if (modelX < -1.5f)
-		modelX = 1.5f;
-	device->SetTransform(D3DTS_WORLD, &(matrixScale * matrixTranslate));
-	anim->draw(device);
+	if (modelX < -1.0f)
+		modelX = 1.0f;
 
 	computeFPS();
 	device->EndScene();

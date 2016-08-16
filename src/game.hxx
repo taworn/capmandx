@@ -5,6 +5,7 @@
 #ifndef GAME_HXX
 #define GAME_HXX
 
+#include "sprite.hxx"
 #include "animation.hxx"
 
 #define SCENE_DEFAULT 0

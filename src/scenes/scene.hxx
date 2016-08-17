@@ -6,7 +6,7 @@
 #define SCENES_SCENE_HXX
 
 /**
- * A single game scene.
+ * A base game scene.
  */
 class Scene
 {

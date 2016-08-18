@@ -57,6 +57,14 @@ void Scene::computeFPS()
 	Game::instance()->getSmallFont()->DrawText(NULL, buffer, -1, &rc, DT_RIGHT | DT_BOTTOM, D3DCOLOR_ARGB(0x80, 0xFF, 0xFF, 0xFF));
 }
 
+void Scene::handleActivate(HWND hwnd, bool active)
+{
+	if (active) {
+		frameCount = 0;
+		timeStart = GetTickCount();
+	}
+}
+
 bool Scene::handleKey(HWND hwnd, WPARAM key)
 {
 	return false;

@@ -14,6 +14,16 @@
 PlayScene::~PlayScene()
 {
 	BOOST_LOG_TRIVIAL(debug) << "PlayScene::~PlayScene() called";
+	for (int i = 0; i < 4; i++) {
+		if (aniDivoes[i]) {
+			delete aniDivoes[i];
+			aniDivoes[i] = NULL;
+		}
+	}
+	if (aniHero) {
+		delete aniHero;
+		aniHero = NULL;
+	}
 	fini();
 }
 
@@ -23,15 +33,6 @@ PlayScene::PlayScene()
 {
 	BOOST_LOG_TRIVIAL(debug) << "PlayScene::PlayScene() called";
 	init();
-}
-
-void PlayScene::init()
-{
-	BOOST_LOG_TRIVIAL(debug) << "PlayScene::init() called";
-	IDirect3DDevice9 *device = Game::instance()->getDevice();
-
-	sprite = new Sprite();
-	sprite->init(device, L".\\res\\pacman.png", 8, 8);
 
 	const int TIME = 300;
 	aniHero = new Animation(sprite);
@@ -51,19 +52,24 @@ void PlayScene::init()
 	}
 }
 
+void PlayScene::init()
+{
+	BOOST_LOG_TRIVIAL(debug) << "PlayScene::init() called";
+	IDirect3DDevice9 *device = Game::instance()->getDevice();
+
+	sprite = new Sprite();
+	sprite->init(device, L".\\res\\pacman.png", 8, 8);
+
+	if (aniHero) {
+		aniHero->setSprite(sprite);
+		for (int i = 0; i < 4; i++)
+			aniDivoes[i]->setSprite(sprite);
+	}
+}
+
 void PlayScene::fini()
 {
 	BOOST_LOG_TRIVIAL(debug) << "PlayScene::fini() called";
-	for (int i = 0; i < 4; i++) {
-		if (aniDivoes[i]) {
-			delete aniDivoes[i];
-			aniDivoes[i] = NULL;
-		}
-	}
-	if (aniHero) {
-		delete aniHero;
-		aniHero = NULL;
-	}
 	if (sprite) {
 		delete sprite;
 		sprite = NULL;

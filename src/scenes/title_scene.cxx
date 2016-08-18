@@ -14,6 +14,14 @@
 TitleScene::~TitleScene()
 {
 	BOOST_LOG_TRIVIAL(debug) << "TitleScene::~TitleScene() called";
+	if (aniDivo) {
+		delete aniDivo;
+		aniDivo = NULL;
+	}
+	if (aniHero) {
+		delete aniHero;
+		aniHero = NULL;
+	}
 	fini();
 }
 
@@ -21,18 +29,6 @@ TitleScene::TitleScene() : Scene(), titleFont(), modelX(0.0f)
 {
 	BOOST_LOG_TRIVIAL(debug) << "TitleScene::TitleScene() called";
 	init();
-}
-
-void TitleScene::init()
-{
-	BOOST_LOG_TRIVIAL(debug) << "TitleScene::init() called";
-	IDirect3DDevice9 *device = Game::instance()->getDevice();
-
-	D3DXCreateFont(device, 128, 0, FW_BOLD, 1, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, TEXT("Times New Roman"), &titleFont);
-
-	sprite = new Sprite();
-	sprite->init(device, L".\\res\\pacman.png", 8, 8);
-
 	const int TIME = 300;
 	aniHero = new Animation(sprite);
 	aniHero->add(0, 0, 2, TIME);
@@ -49,17 +45,25 @@ void TitleScene::init()
 	aniDivo->use(0);
 }
 
+void TitleScene::init()
+{
+	BOOST_LOG_TRIVIAL(debug) << "TitleScene::init() called";
+	IDirect3DDevice9 *device = Game::instance()->getDevice();
+
+	D3DXCreateFont(device, 128, 0, FW_BOLD, 1, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, TEXT("Times New Roman"), &titleFont);
+
+	sprite = new Sprite();
+	sprite->init(device, L".\\res\\pacman.png", 8, 8);
+
+	if (aniHero) {
+		aniHero->setSprite(sprite);
+		aniDivo->setSprite(sprite);
+	}
+}
+
 void TitleScene::fini()
 {
 	BOOST_LOG_TRIVIAL(debug) << "TitleScene::fini() called";
-	if (aniDivo) {
-		delete aniDivo;
-		aniDivo = NULL;
-	}
-	if (aniHero) {
-		delete aniHero;
-		aniHero = NULL;
-	}
 	if (sprite) {
 		delete sprite;
 		sprite = NULL;

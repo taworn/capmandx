@@ -12,12 +12,14 @@
 
 Scene::~Scene()
 {
+	BOOST_LOG_TRIVIAL(debug) << "Scene::~Scene() called";
 }
 
 Scene::Scene()
 	: screenRect()
 	, fps(0), frameCount(0), timeStart(0)
 {
+	BOOST_LOG_TRIVIAL(debug) << "Scene::Scene() called";
 	Game *game = Game::instance();
 
 	D3DDEVICE_CREATION_PARAMETERS cp;
@@ -29,10 +31,12 @@ Scene::Scene()
 
 void Scene::init()
 {
+	BOOST_LOG_TRIVIAL(debug) << "Scene::init() called";
 }
 
 void Scene::fini()
 {
+	BOOST_LOG_TRIVIAL(debug) << "Scene::fini() called";
 }
 
 void Scene::computeFPS()

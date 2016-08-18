@@ -13,16 +13,19 @@
 
 TitleScene::~TitleScene()
 {
+	BOOST_LOG_TRIVIAL(debug) << "TitleScene::~TitleScene() called";
 	fini();
 }
 
 TitleScene::TitleScene() : Scene(), titleFont(), modelX(0.0f)
 {
+	BOOST_LOG_TRIVIAL(debug) << "TitleScene::TitleScene() called";
 	init();
 }
 
 void TitleScene::init()
 {
+	BOOST_LOG_TRIVIAL(debug) << "TitleScene::init() called";
 	IDirect3DDevice9 *device = Game::instance()->getDevice();
 
 	D3DXCreateFont(device, 128, 0, FW_BOLD, 1, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, TEXT("Times New Roman"), &titleFont);
@@ -48,6 +51,7 @@ void TitleScene::init()
 
 void TitleScene::fini()
 {
+	BOOST_LOG_TRIVIAL(debug) << "TitleScene::fini() called";
 	if (aniDivo) {
 		delete aniDivo;
 		aniDivo = NULL;

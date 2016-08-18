@@ -36,7 +36,10 @@ Game::Game(IDirect3DDevice9 *dev)
 
 void Game::changeScene(int sceneId)
 {
+	BOOST_LOG_TRIVIAL(debug) << "changeScene() called, sceneId = " << sceneId;
+
 	delete scene;
+
 	switch (sceneId) {
 	default:
 	case SCENE_DEFAULT:

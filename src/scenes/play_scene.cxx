@@ -29,7 +29,6 @@ PlayScene::~PlayScene()
 
 PlayScene::PlayScene()
 	: Scene()
-	, modelX(0.0f), modelY(0.0f), modelDx(0.0f), modelDy(0.0f)
 {
 	BOOST_LOG_TRIVIAL(debug) << "PlayScene::PlayScene() called";
 	init();
@@ -92,33 +91,29 @@ bool PlayScene::handleKey(HWND hwnd, WPARAM key)
 	else if (key == 0x57 || key == VK_UP) {
 		// up
 		OutputDebugStringW(L"W -or- UP keydown\n");
+		aniHero->setVelocity(0.0f, 0.01f);
 		aniHero->use(2);
-		modelDx = 0.0f;
-		modelDy = 0.01f;
 		return true;
 	}
 	else if (key == 0x53 || key == VK_DOWN) {
 		// down
 		OutputDebugStringW(L"S -or- DOWN keydown\n");
+		aniHero->setVelocity(0.0f, -0.01f);
 		aniHero->use(3);
-		modelDx = 0.0f;
-		modelDy = -0.01f;
 		return true;
 	}
 	else if (key == 0x41 || key == VK_LEFT) {
 		// left
 		OutputDebugStringW(L"A -or- LEFT keydown\n");
+		aniHero->setVelocity(-0.01f, 0.0f);
 		aniHero->use(0);
-		modelDx = -0.01f;
-		modelDy = 0.0f;
 		return true;
 	}
 	else if (key == 0x44 || key == VK_RIGHT) {
 		// right
 		OutputDebugStringW(L"D -or- RIGHT keydown\n");
+		aniHero->setVelocity(0.01f, 0.0f);
 		aniHero->use(1);
-		modelDx = 0.01f;
-		modelDy = 0.0f;
 		return true;
 	}
 	return false;
@@ -148,15 +143,18 @@ void PlayScene::render()
 	D3DXMATRIX matrixScale;
 	D3DXMatrixScaling(&matrixScale, 0.04f, 0.04f, 1.0f);
 	D3DXMATRIX matrixTranslate;
-	D3DXMatrixTranslation(&matrixTranslate, modelX * 25, modelY * 25, 0);
-	if (modelDx > 0.0f && modelX < 0.95f)
-		modelX += modelDx;
-	else if (modelDx < 0.0f && modelX > -0.95f)
-		modelX += modelDx;
-	if (modelDy > 0.0f && modelY < 0.95f)
-		modelY += modelDy;
-	else if (modelDy < 0.0f && modelY > -0.95f)
-		modelY += modelDy;
+	D3DXMatrixTranslation(&matrixTranslate, aniHero->getCurrentX() * 25, aniHero->getCurrentY() * 25, 0);
+
+	bool enableX = false, enableY = false;
+	if (aniHero->getVelocityX() > 0.0f && aniHero->getCurrentX() < 0.95f)
+		enableX = true;
+	else if (aniHero->getVelocityX() < 0.0f && aniHero->getCurrentX() > -0.95f)
+		enableX = true;
+	if (aniHero->getVelocityY() > 0.0f && aniHero->getCurrentY() < 0.95f)
+		enableY = true;
+	else if (aniHero->getVelocityY() < 0.0f && aniHero->getCurrentY() > -0.95f)
+		enableY = true;
+	aniHero->playFrame(enableX, enableY);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
 	aniHero->draw(device);
 

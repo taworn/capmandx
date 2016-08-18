@@ -21,11 +21,6 @@ private:
 	Sprite *sprite;
 	Animation *aniHero;
 	Animation *aniDivoes[4];
-	
-	float modelX;
-	float modelY;
-	float modelDx;
-	float modelDy;
 
 public:
 	virtual bool handleKey(HWND hwnd, WPARAM key);

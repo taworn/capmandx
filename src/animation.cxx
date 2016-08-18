@@ -14,7 +14,9 @@ Animation::~Animation()
 {
 }
 
-Animation::Animation(Sprite *s) : sprite(s), plays(), currentPlaying(-1), currentImage(0)
+Animation::Animation(Sprite *s)
+	: sprite(s), plays(), currentPlaying(-1), currentImage(0)
+	, currentX(0), currentY(0), velocityX(0), velocityY(0)
 {
 	assert(sprite);
 	timeStart = GetTickCount();

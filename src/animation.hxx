@@ -43,6 +43,37 @@ public:
 	 */
 	void draw(IDirect3DDevice9 *device);
 
+	float getCurrentX() const { return currentX; }
+	float getCurrentY() const { return currentY; }
+	float getVelocityX() const { return velocityX; }
+	float getVelocityY() const { return velocityY; }
+
+	void moveTo(float x, float y)
+	{
+		currentX = x;
+		currentY = y;
+	}
+
+	void moveBy(float dx, float dy)
+	{
+		currentX += dx;
+		currentY += dy;
+	}
+
+	void setVelocity(float x, float y)
+	{
+		velocityX = x;
+		velocityY = y;
+	}
+
+	void playFrame(bool enableX, bool enableY)
+	{
+		if (enableX)
+			currentX += velocityX;
+		if (enableY)
+			currentY += velocityY;
+	}
+
 private:
 	Sprite *sprite;
 
@@ -56,6 +87,9 @@ private:
 	int currentPlaying;
 	int currentImage;
 	ULONGLONG timeStart;
+
+	float currentX, currentY;
+	float velocityX, velocityY;
 
 	Animation(const Animation&);
 	Animation& operator=(const Animation&);

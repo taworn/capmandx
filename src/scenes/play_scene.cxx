@@ -8,21 +8,28 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include "../game.hxx"
+#include "../game/common.hxx"
 #include "scene.hxx"
 #include "play_scene.hxx"
 
 PlayScene::~PlayScene()
 {
 	BOOST_LOG_TRIVIAL(debug) << "PlayScene::~PlayScene() called";
+	/*
 	for (int i = 0; i < 4; i++) {
 		if (aniDivoes[i]) {
 			delete aniDivoes[i];
 			aniDivoes[i] = NULL;
 		}
 	}
-	if (aniHero) {
-		delete aniHero;
-		aniHero = NULL;
+	*/
+	if (movHero) {
+		delete movHero;
+		movHero = NULL;
+	}
+	if (map) {
+		delete map;
+		map = NULL;
 	}
 	fini();
 }
@@ -33,14 +40,19 @@ PlayScene::PlayScene()
 	BOOST_LOG_TRIVIAL(debug) << "PlayScene::PlayScene() called";
 	init();
 
-	const int TIME = 300;
-	aniHero = new Animation();
-	aniHero->add(0, 0, 2, TIME);
-	aniHero->add(1, 2, 4, TIME);
-	aniHero->add(2, 4, 6, TIME);
-	aniHero->add(3, 6, 8, TIME);
-	aniHero->use(0);
+	map = new Map();
+	map->load();
 
+	const int TIME = 300;
+	movHero = new Movable();
+	movHero->add(0, 0, 2, TIME);
+	movHero->add(1, 2, 4, TIME);
+	movHero->add(2, 4, 6, TIME);
+	movHero->add(3, 6, 8, TIME);
+	movHero->setMap(map);
+	movHero->use(0);
+
+	/*
 	for (int i = 0; i < 4; i++) {
 		aniDivoes[i] = new Animation();
 		aniDivoes[i]->add(0, (i + 1) * 8 + 0, (i + 1) * 8 + 2, TIME);
@@ -49,6 +61,7 @@ PlayScene::PlayScene()
 		aniDivoes[i]->add(3, (i + 1) * 8 + 6, (i + 1) * 8 + 8, TIME);
 		aniDivoes[i]->use(0);
 	}
+	*/
 }
 
 void PlayScene::init()
@@ -56,16 +69,23 @@ void PlayScene::init()
 	BOOST_LOG_TRIVIAL(debug) << "PlayScene::init() called";
 	IDirect3DDevice9 *device = Game::instance()->getDevice();
 
-	sprite = new Sprite();
-	sprite->init(device, L".\\res\\pacman.png", 8, 8);
+	spritePacman = new Sprite();
+	spritePacman->init(device, L".\\res\\pacman.png", 8, 8);
+
+	spriteMap = new Sprite();
+	spriteMap->init(device, L".\\res\\map64.png", 2, 2);
 }
 
 void PlayScene::fini()
 {
 	BOOST_LOG_TRIVIAL(debug) << "PlayScene::fini() called";
-	if (sprite) {
-		delete sprite;
-		sprite = NULL;
+	if (spriteMap) {
+		delete spriteMap;
+		spriteMap = NULL;
+	}
+	if (spritePacman) {
+		delete spritePacman;
+		spritePacman = NULL;
 	}
 }
 
@@ -85,29 +105,29 @@ bool PlayScene::handleKey(HWND hwnd, WPARAM key)
 	else if (key == 0x57 || key == VK_UP) {
 		// up
 		OutputDebugStringW(L"W -or- UP keydown\n");
-		aniHero->setVelocity(0.0f, 0.01f);
-		aniHero->use(2);
+		movHero->setVelocity(0.0f, 0.01f);
+		movHero->use(2);
 		return true;
 	}
 	else if (key == 0x53 || key == VK_DOWN) {
 		// down
 		OutputDebugStringW(L"S -or- DOWN keydown\n");
-		aniHero->setVelocity(0.0f, -0.01f);
-		aniHero->use(3);
+		movHero->setVelocity(0.0f, -0.01f);
+		movHero->use(3);
 		return true;
 	}
 	else if (key == 0x41 || key == VK_LEFT) {
 		// left
 		OutputDebugStringW(L"A -or- LEFT keydown\n");
-		aniHero->setVelocity(-0.01f, 0.0f);
-		aniHero->use(0);
+		movHero->setVelocity(-0.01f, 0.0f);
+		movHero->use(0);
 		return true;
 	}
 	else if (key == 0x44 || key == VK_RIGHT) {
 		// right
 		OutputDebugStringW(L"D -or- RIGHT keydown\n");
-		aniHero->setVelocity(0.01f, 0.0f);
-		aniHero->use(1);
+		movHero->setVelocity(0.01f, 0.0f);
+		movHero->use(1);
 		return true;
 	}
 	return false;
@@ -133,40 +153,45 @@ void PlayScene::render()
 	device->SetTransform(D3DTS_VIEW, &matrixView);
 	device->SetTransform(D3DTS_PROJECTION, &matrixProjection);
 
+	map->draw(device, spriteMap);
+
 	// scaling and translating
 	D3DXMATRIX matrixScale;
-	D3DXMatrixScaling(&matrixScale, 0.04f, 0.04f, 1.0f);
+	//D3DXMatrixScaling(&matrixScale, 0.1f, 0.15f, 1.0f);
+	D3DXMatrixScaling(&matrixScale, 0.0625f, 0.0625f, 1.0f);
 	D3DXMATRIX matrixTranslate;
-	D3DXMatrixTranslation(&matrixTranslate, aniHero->getCurrentX() * 25, aniHero->getCurrentY() * 25, 0);
+	D3DXMatrixTranslation(&matrixTranslate, movHero->getCurrentX() * 16, movHero->getCurrentY() * 16, 0);
 
 	bool enableX = false, enableY = false;
-	if (aniHero->getVelocityX() > 0.0f && aniHero->getCurrentX() < 0.95f)
+	if (movHero->getVelocityX() > 0.0f && movHero->getCurrentX() < 0.95f)
 		enableX = true;
-	else if (aniHero->getVelocityX() < 0.0f && aniHero->getCurrentX() > -0.95f)
+	else if (movHero->getVelocityX() < 0.0f && movHero->getCurrentX() > -0.95f)
 		enableX = true;
-	if (aniHero->getVelocityY() > 0.0f && aniHero->getCurrentY() < 0.95f)
+	if (movHero->getVelocityY() > 0.0f && movHero->getCurrentY() < 0.95f)
 		enableY = true;
-	else if (aniHero->getVelocityY() < 0.0f && aniHero->getCurrentY() > -0.95f)
+	else if (movHero->getVelocityY() < 0.0f && movHero->getCurrentY() > -0.95f)
 		enableY = true;
-	aniHero->playFrame(enableX, enableY);
+	movHero->playFrame(enableX, enableY);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
-	aniHero->draw(device, sprite);
+	movHero->draw(device, spritePacman);
 
+	/*
 	D3DXMatrixTranslation(&matrixTranslate, -0.5f * 25, 0.5f * 25, 0);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
-	aniDivoes[0]->draw(device, sprite);
+	aniDivoes[0]->draw(device, spritePacman);
 
 	D3DXMatrixTranslation(&matrixTranslate, 0.5f * 25, 0.5f * 25, 0);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
-	aniDivoes[1]->draw(device, sprite);
+	aniDivoes[1]->draw(device, spritePacman);
 
 	D3DXMatrixTranslation(&matrixTranslate, -0.5f * 25, -0.5f * 25, 0);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
-	aniDivoes[2]->draw(device, sprite);
+	aniDivoes[2]->draw(device, spritePacman);
 
 	D3DXMatrixTranslation(&matrixTranslate, 0.5f * 25, -0.5f * 25, 0);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
-	aniDivoes[3]->draw(device, sprite);
+	aniDivoes[3]->draw(device, spritePacman);
+	*/
 
 	computeFPS();
 	device->EndScene();

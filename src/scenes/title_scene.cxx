@@ -8,6 +8,7 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include "../game.hxx"
+#include "../game/common.hxx"
 #include "scene.hxx"
 #include "title_scene.hxx"
 
@@ -53,16 +54,16 @@ void TitleScene::init()
 
 	D3DXCreateFont(device, 128, 0, FW_BOLD, 1, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, TEXT("Times New Roman"), &titleFont);
 
-	sprite = new Sprite();
-	sprite->init(device, L".\\res\\pacman.png", 8, 8);
+	spritePacman = new Sprite();
+	spritePacman->init(device, L".\\res\\pacman.png", 8, 8);
 }
 
 void TitleScene::fini()
 {
 	BOOST_LOG_TRIVIAL(debug) << "TitleScene::fini() called";
-	if (sprite) {
-		delete sprite;
-		sprite = NULL;
+	if (spritePacman) {
+		delete spritePacman;
+		spritePacman = NULL;
 	}
 	if (titleFont != NULL) {
 		titleFont->Release();
@@ -113,11 +114,11 @@ void TitleScene::render()
 	D3DXMATRIX matrixTranslate;
 	D3DXMatrixTranslation(&matrixTranslate, modelX * 20, -0.2f * 20, 0);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
-	aniHero->draw(device, sprite);
+	aniHero->draw(device, spritePacman);
 
 	D3DXMatrixTranslation(&matrixTranslate, (modelX - 0.25f) * 20, -0.2f * 20, 0);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
-	aniDivo->draw(device, sprite);
+	aniDivo->draw(device, spritePacman);
 
 	modelX -= 0.01f;
 	if (modelX < -1.0f)

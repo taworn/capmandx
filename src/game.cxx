@@ -31,7 +31,8 @@ Game::Game(IDirect3DDevice9 *dev)
 	assert(singleton == NULL);
 	singleton = this;
 	init();
-	scene = new TitleScene();
+	//scene = new TitleScene();
+	scene = new PlayScene();
 }
 
 void Game::changeScene(int sceneId)

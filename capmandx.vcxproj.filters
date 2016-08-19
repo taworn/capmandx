@@ -19,6 +19,12 @@
     <Filter Include="Source Files\scenes">
       <UniqueIdentifier>{17350c9f-752b-47fe-92b5-6914e3a2c84a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game">
+      <UniqueIdentifier>{13ab5f16-ef20-45a1-bd32-db45a31272ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game">
+      <UniqueIdentifier>{4bfef13a-6ee8-4160-b75d-f38a3069df44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\winmain.cxx">
@@ -45,6 +51,12 @@
     <ClCompile Include="src\sprite.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\map.cxx">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\movable.cxx">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\d3d.hxx">
@@ -67,6 +79,15 @@
     </ClInclude>
     <ClInclude Include="src\sprite.hxx">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\map.hxx">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\common.hxx">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\movable.hxx">
+      <Filter>Header Files\game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

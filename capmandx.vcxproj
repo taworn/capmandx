@@ -161,6 +161,8 @@
     <ClCompile Include="src\animation.cxx" />
     <ClCompile Include="src\d3d.cxx" />
     <ClCompile Include="src\game.cxx" />
+    <ClCompile Include="src\game\map.cxx" />
+    <ClCompile Include="src\game\movable.cxx" />
     <ClCompile Include="src\scenes\play_scene.cxx" />
     <ClCompile Include="src\scenes\scene.cxx" />
     <ClCompile Include="src\scenes\title_scene.cxx" />
@@ -171,6 +173,9 @@
     <ClInclude Include="src\animation.hxx" />
     <ClInclude Include="src\d3d.hxx" />
     <ClInclude Include="src\game.hxx" />
+    <ClInclude Include="src\game\common.hxx" />
+    <ClInclude Include="src\game\map.hxx" />
+    <ClInclude Include="src\game\movable.hxx" />
     <ClInclude Include="src\scenes\play_scene.hxx" />
     <ClInclude Include="src\scenes\scene.hxx" />
     <ClInclude Include="src\scenes\title_scene.hxx" />

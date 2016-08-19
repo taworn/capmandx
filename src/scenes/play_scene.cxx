@@ -34,7 +34,7 @@ PlayScene::PlayScene()
 	init();
 
 	const int TIME = 300;
-	aniHero = new Animation(sprite);
+	aniHero = new Animation();
 	aniHero->add(0, 0, 2, TIME);
 	aniHero->add(1, 2, 4, TIME);
 	aniHero->add(2, 4, 6, TIME);
@@ -42,7 +42,7 @@ PlayScene::PlayScene()
 	aniHero->use(0);
 
 	for (int i = 0; i < 4; i++) {
-		aniDivoes[i] = new Animation(sprite);
+		aniDivoes[i] = new Animation();
 		aniDivoes[i]->add(0, (i + 1) * 8 + 0, (i + 1) * 8 + 2, TIME);
 		aniDivoes[i]->add(1, (i + 1) * 8 + 2, (i + 1) * 8 + 4, TIME);
 		aniDivoes[i]->add(2, (i + 1) * 8 + 4, (i + 1) * 8 + 6, TIME);
@@ -58,12 +58,6 @@ void PlayScene::init()
 
 	sprite = new Sprite();
 	sprite->init(device, L".\\res\\pacman.png", 8, 8);
-
-	if (aniHero) {
-		aniHero->setSprite(sprite);
-		for (int i = 0; i < 4; i++)
-			aniDivoes[i]->setSprite(sprite);
-	}
 }
 
 void PlayScene::fini()
@@ -156,23 +150,23 @@ void PlayScene::render()
 		enableY = true;
 	aniHero->playFrame(enableX, enableY);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
-	aniHero->draw(device);
+	aniHero->draw(device, sprite);
 
 	D3DXMatrixTranslation(&matrixTranslate, -0.5f * 25, 0.5f * 25, 0);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
-	aniDivoes[0]->draw(device);
+	aniDivoes[0]->draw(device, sprite);
 
 	D3DXMatrixTranslation(&matrixTranslate, 0.5f * 25, 0.5f * 25, 0);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
-	aniDivoes[1]->draw(device);
+	aniDivoes[1]->draw(device, sprite);
 
 	D3DXMatrixTranslation(&matrixTranslate, -0.5f * 25, -0.5f * 25, 0);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
-	aniDivoes[2]->draw(device);
+	aniDivoes[2]->draw(device, sprite);
 
 	D3DXMatrixTranslation(&matrixTranslate, 0.5f * 25, -0.5f * 25, 0);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
-	aniDivoes[3]->draw(device);
+	aniDivoes[3]->draw(device, sprite);
 
 	computeFPS();
 	device->EndScene();

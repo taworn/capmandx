@@ -21,12 +21,7 @@ public:
 	/**
 	 * Constructs an animation.
 	 */
-	Animation(Sprite *s);
-
-	/**
-	 * Sets sprite.
-	 */
-	void setSprite(Sprite *s);
+	Animation();
 
 	/**
 	 * Adds a playing animation, only 16 set allow.
@@ -41,7 +36,7 @@ public:
 	/**
 	 * Draws animation.
 	 */
-	void draw(IDirect3DDevice9 *device);
+	void draw(IDirect3DDevice9 *device, Sprite *sprite);
 
 	float getCurrentX() const { return currentX; }
 	float getCurrentY() const { return currentY; }
@@ -75,8 +70,6 @@ public:
 	}
 
 private:
-	Sprite *sprite;
-
 	static const int PLAYING_MAX = 16;
 	struct PLAYING {
 		int start;
@@ -86,10 +79,11 @@ private:
 	PLAYING plays[PLAYING_MAX];
 	int currentPlaying;
 	int currentImage;
-	ULONGLONG timeStart;
 
 	float currentX, currentY;
 	float velocityX, velocityY;
+
+	ULONGLONG timeStart;
 
 	Animation(const Animation&);
 	Animation& operator=(const Animation&);

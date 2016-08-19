@@ -29,15 +29,16 @@ TitleScene::TitleScene() : Scene(), titleFont(), modelX(0.0f)
 {
 	BOOST_LOG_TRIVIAL(debug) << "TitleScene::TitleScene() called";
 	init();
+
 	const int TIME = 300;
-	aniHero = new Animation(sprite);
+	aniHero = new Animation();
 	aniHero->add(0, 0, 2, TIME);
 	aniHero->add(1, 2, 4, TIME);
 	aniHero->add(2, 4, 6, TIME);
 	aniHero->add(3, 6, 8, TIME);
 	aniHero->use(0);
 
-	aniDivo = new Animation(sprite);
+	aniDivo = new Animation();
 	aniDivo->add(0, 8, 10, TIME);
 	aniDivo->add(1, 10, 12, TIME);
 	aniDivo->add(2, 12, 14, TIME);
@@ -54,11 +55,6 @@ void TitleScene::init()
 
 	sprite = new Sprite();
 	sprite->init(device, L".\\res\\pacman.png", 8, 8);
-
-	if (aniHero) {
-		aniHero->setSprite(sprite);
-		aniDivo->setSprite(sprite);
-	}
 }
 
 void TitleScene::fini()
@@ -117,11 +113,11 @@ void TitleScene::render()
 	D3DXMATRIX matrixTranslate;
 	D3DXMatrixTranslation(&matrixTranslate, modelX * 20, -0.2f * 20, 0);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
-	aniHero->draw(device);
+	aniHero->draw(device, sprite);
 
 	D3DXMatrixTranslation(&matrixTranslate, (modelX - 0.25f) * 20, -0.2f * 20, 0);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
-	aniDivo->draw(device);
+	aniDivo->draw(device, sprite);
 
 	modelX -= 0.01f;
 	if (modelX < -1.0f)

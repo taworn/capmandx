@@ -48,10 +48,6 @@ void Scene::computeFPS()
 		fps = (int)(frameCount * 1000 / timeUsage);
 		timeStart = timeCurrent;
 		frameCount = 0;
-
-		wchar_t buffer[64];
-		wsprintf(buffer, L"FPS: %d\n", fps);
-		OutputDebugStringW(buffer);
 		BOOST_LOG_TRIVIAL(trace) << "FPS: " << fps;
 	}
 

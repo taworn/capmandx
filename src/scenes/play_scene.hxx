@@ -5,8 +5,7 @@
 #ifndef SCENES_PLAY_SCENE_HXX
 #define SCENES_PLAY_SCENE_HXX
 
-class Map;
-class Movable;
+#include "..\game\common.hxx"
 
 /**
  * Playing game scene.
@@ -21,11 +20,12 @@ public:
 	virtual void fini();
 
 private:
-	Sprite *spritePacman;
 	Sprite *spriteMap;
-	Map *map;
-	Movable *movHero;
-	//Animation *aniDivoes[4];
+	Sprite *spritePacman;
+	Map map;
+	Divo movDivoes[4];
+	Pacman movHero;
+	ULONGLONG timeStart;
 
 public:
 	virtual bool handleKey(HWND hwnd, WPARAM key);

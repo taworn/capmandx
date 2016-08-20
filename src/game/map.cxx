@@ -51,28 +51,28 @@ bool Map::load()
 
 	horzBounds.clear();
 	horzBounds.resize(width + 1);
-	for (int i = 0; i < horzBounds.size(); i++)
+	for (size_t i = 0; i < horzBounds.size(); i++)
 		horzBounds[i] = (float)i / (horzBounds.size() - 1) * 2.0f - 1.0f;
 
 	horzPoints.clear();
 	horzPoints.resize(width);
-	for (int i = 0; i < horzPoints.size(); i++)
+	for (size_t i = 0; i < horzPoints.size(); i++)
 		horzPoints[i] = (horzBounds[i] + horzBounds[i + 1]) / 2.0f;
 
 	vertBounds.clear();
 	vertBounds.resize(height + 1);
-	for (int i = 0; i < vertBounds.size(); i++)
+	for (size_t i = 0; i < vertBounds.size(); i++)
 		vertBounds[i] = (float)(vertBounds.size() - 1 - i) / (vertBounds.size() - 1) * 2.0f - 1.0f;
 
 	vertPoints.clear();
 	vertPoints.resize(height);
-	for (int i = 0; i < vertPoints.size(); i++)
+	for (size_t i = 0; i < vertPoints.size(); i++)
 		vertPoints[i] = (vertBounds[i] + vertBounds[i + 1]) / 2.0f;
 
 	startPacman.x = 7;
 	startPacman.y = 10;
-	startDivo.x = 13;
-	startDivo.y = 3;
+	startDivo.x = 8;
+	startDivo.y = 1;
 	return true;
 }
 
@@ -167,5 +167,27 @@ bool Map::canMove(Movable *movable, int direction, POINT *p, POINTFLOAT *pf)
 	}
 
 	return false;
+}
+
+int Map::canPreviewMove(Movable *movable)
+{
+	int x = movable->getX();
+	int y = movable->getY();
+	int result = 0;
+
+	// left
+	if (x > 0 && !mapData[y * width + x - 1].block)
+		result |= MOVE_LEFT;
+	// right
+	if (x < width - 1 && !mapData[y * width + x + 1].block)
+		result |= MOVE_RIGHT;
+	// up
+	if (y > 0 && !mapData[(y - 1) * width + x].block)
+		result |= MOVE_UP;
+	// down
+	if (y < height - 1 && !mapData[(y + 1) * width + x].block)
+		result |= MOVE_DOWN;
+
+	return result;
 }
 

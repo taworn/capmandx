@@ -17,8 +17,8 @@ class Map
 public:
 	static const int MOVE_LEFT = 1;
 	static const int MOVE_RIGHT = 2;
-	static const int MOVE_UP = 3;
-	static const int MOVE_DOWN = 4;
+	static const int MOVE_UP = 4;
+	static const int MOVE_DOWN = 8;
 
 	/**
 	 * Destructs the map.
@@ -44,6 +44,12 @@ public:
 	 * Checks if direction is can be pass.
 	 */
 	bool canMove(Movable *movable, int direction, POINT *p, POINTFLOAT *pf);
+
+	/**
+	 * Checks 4-directions which ways can move or not.
+	 * @return Bit flags in order: left, right, up, down.
+	 */
+	int canPreviewMove(Movable *movable);
 
 	void setPacmanPosition(POINT *p, POINTFLOAT *pf);
 	void setDivoPosition(POINT *p, POINTFLOAT *pf);

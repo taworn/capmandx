@@ -15,6 +15,8 @@ class Map;
 class Movable
 {
 public:
+	static const int TIME_PER_ANI_FRAME = 250;
+
 	/**
 	 * Destructs the movable.
 	 */
@@ -39,10 +41,20 @@ public:
 	int getX() const { return point.x; }
 	int getY() const { return point.y; }
 	void move(int direction);
+	void play(ULONGLONG timeUsed);
+	virtual void nextMove();
 	virtual void setMap(Map *map) = 0;
 
 protected:
 	POINT point;
+	bool walking;
+	float distance;
+	float target;
+	int currentDirection;
+	int nextDirection;
+	ULONGLONG timePerDistance;
+	ULONGLONG timeUsed;
+
 	Animation animation;
 	Map *map;
 

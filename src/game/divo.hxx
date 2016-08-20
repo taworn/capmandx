@@ -23,6 +23,8 @@ public:
 	 */
 	Divo();
 
+	void setId(int divoId);
+	virtual void nextMove();
 	virtual void setMap(Map *map);
 
 private:

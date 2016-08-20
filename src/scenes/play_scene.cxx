@@ -105,29 +105,33 @@ bool PlayScene::handleKey(HWND hwnd, WPARAM key)
 	else if (key == 0x57 || key == VK_UP) {
 		// up
 		OutputDebugStringW(L"W -or- UP keydown\n");
-		movHero->setVelocity(0.0f, 0.01f);
-		movHero->use(2);
+		//movHero->setVelocity(0.0f, 0.01f);
+		//movHero->use(2);
+		movHero->move(Map::MOVE_UP);
 		return true;
 	}
 	else if (key == 0x53 || key == VK_DOWN) {
 		// down
 		OutputDebugStringW(L"S -or- DOWN keydown\n");
-		movHero->setVelocity(0.0f, -0.01f);
-		movHero->use(3);
+		//movHero->setVelocity(0.0f, -0.01f);
+		//movHero->use(3);
+		movHero->move(Map::MOVE_DOWN);
 		return true;
 	}
 	else if (key == 0x41 || key == VK_LEFT) {
 		// left
 		OutputDebugStringW(L"A -or- LEFT keydown\n");
-		movHero->setVelocity(-0.01f, 0.0f);
-		movHero->use(0);
+		//movHero->setVelocity(-0.01f, 0.0f);
+		//movHero->use(0);
+		movHero->move(Map::MOVE_LEFT);
 		return true;
 	}
 	else if (key == 0x44 || key == VK_RIGHT) {
 		// right
 		OutputDebugStringW(L"D -or- RIGHT keydown\n");
-		movHero->setVelocity(0.01f, 0.0f);
-		movHero->use(1);
+		//movHero->setVelocity(0.01f, 0.0f);
+		//movHero->use(1);
+		movHero->move(Map::MOVE_RIGHT);
 		return true;
 	}
 	return false;
@@ -161,7 +165,7 @@ void PlayScene::render()
 	D3DXMatrixScaling(&matrixScale, 0.0625f, 0.0625f, 1.0f);
 	D3DXMATRIX matrixTranslate;
 	D3DXMatrixTranslation(&matrixTranslate, movHero->getCurrentX() * 16, movHero->getCurrentY() * 16, 0);
-
+	/*
 	bool enableX = false, enableY = false;
 	if (movHero->getVelocityX() > 0.0f && movHero->getCurrentX() < 0.95f)
 		enableX = true;
@@ -172,6 +176,7 @@ void PlayScene::render()
 	else if (movHero->getVelocityY() < 0.0f && movHero->getCurrentY() > -0.95f)
 		enableY = true;
 	movHero->playFrame(enableX, enableY);
+	*/
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
 	movHero->draw(device, spritePacman);
 

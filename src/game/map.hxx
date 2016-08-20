@@ -7,12 +7,19 @@
 
 #include <vector>
 
+class Movable;
+
 /**
  * A map class.
  */
 class Map
 {
 public:
+	static const int MOVE_LEFT = 1;
+	static const int MOVE_RIGHT = 2;
+	static const int MOVE_UP = 3;
+	static const int MOVE_DOWN = 4;
+
 	/**
 	 * Destructs the map.
 	 */
@@ -33,9 +40,13 @@ public:
 	 */
 	void draw(IDirect3DDevice9 *device, Sprite *sprite);
 
-	void setPacmanPosition(float *returnX, float *returnY);
+	/**
+	 * Checks if direction is can be pass.
+	 */
+	bool canMove(Movable *movable, int direction, POINT *p, POINTFLOAT *pf);
 
-	bool canPass(float x, float *dx, float y, float *dy);
+	void setPacmanPosition(POINT *p, POINTFLOAT *pf);
+	void setDivoPosition(POINT *p, POINTFLOAT *pf);
 
 private:
 	union MapData {
@@ -56,8 +67,7 @@ private:
 	std::vector<float> vertPoints;
 
 	POINT startPacman;
-
-
+	POINT startDivo;
 
 	Map(const Map&);
 	Map& operator=(const Map&);

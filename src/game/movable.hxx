@@ -25,23 +25,24 @@ public:
 	 */
 	Movable();
 
-	void setMap(Map *map);
-
+	// Animation class' functions
 	void add(int number, int start, int end, int time) { animation.add(number, start, end, time); }
 	void use(int number) { animation.use(number); }
-	void draw(IDirect3DDevice9 *device, Sprite *sprite);
-
+	void draw(IDirect3DDevice9 *device, Sprite *sprite) { animation.draw(device, sprite); }
 	float getCurrentX() const { return animation.getCurrentX(); }
 	float getCurrentY() const { return animation.getCurrentY(); }
 	float getVelocityX() const { return animation.getVelocityX(); }
 	float getVelocityY() const { return animation.getVelocityY(); }
-
-	void moveTo(float x, float y);
-	void moveBy(float dx, float dy) { animation.moveBy(dx, dy); }
-	void setVelocity(float x, float y);
 	void playFrame(bool enableX, bool enableY) { animation.playFrame(enableX, enableY); }
 
+	// new functions
+	int getX() const { return point.x; }
+	int getY() const { return point.y; }
+	void move(int direction);
+	void setMap(Map *map);
+
 private:
+	POINT point;
 	Animation animation;
 	Map *map;
 

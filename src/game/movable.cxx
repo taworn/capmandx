@@ -18,30 +18,47 @@ Movable::Movable() : animation()
 {
 }
 
+void Movable::move(int direction)
+{
+	POINTFLOAT pf;
+
+	if (direction == Map::MOVE_LEFT) {
+		animation.use(0);
+		if (map->canMove(this, direction, &point, &pf)) {
+			BOOST_LOG_TRIVIAL(debug) << "Move to left";
+			animation.moveTo(pf.x, pf.y);
+		}
+	}
+	else if (direction == Map::MOVE_RIGHT) {
+		animation.use(1);
+		if (map->canMove(this, direction, &point, &pf)) {
+			BOOST_LOG_TRIVIAL(debug) << "Move to right";
+			animation.moveTo(pf.x, pf.y);
+		}
+	}
+	else if (direction == Map::MOVE_UP) {
+		animation.use(2);
+		if (map->canMove(this, direction, &point, &pf)) {
+			BOOST_LOG_TRIVIAL(debug) << "Move to up";
+			animation.moveTo(pf.x, pf.y);
+		}
+	}
+	else if (direction == Map::MOVE_DOWN) {
+		animation.use(3);
+		if (map->canMove(this, direction, &point, &pf)) {
+			BOOST_LOG_TRIVIAL(debug) << "Move to down";
+			animation.moveTo(pf.x, pf.y);
+		}
+	}
+}
+
 void Movable::setMap(Map *map)
 {
 	assert(map);
 	this->map = map;
-	
-	float x, y;
-	map->setPacmanPosition(&x, &y);
-	animation.moveTo(x, y);
-}
 
-void Movable::draw(IDirect3DDevice9 *device, Sprite *sprite)
-{
-	animation.draw(device, sprite);
-}
-
-void Movable::moveTo(float x, float y)
-{
-
-	animation.moveTo(x, y);
-}
-
-void Movable::setVelocity(float x, float y)
-{
-	if (map->canPass(animation.getCurrentX(), &x, animation.getCurrentY(), &y))
-		animation.setVelocity(x, y);
+	POINTFLOAT pf;
+	map->setPacmanPosition(&point, &pf);
+	animation.moveTo(pf.x, pf.y);
 }
 

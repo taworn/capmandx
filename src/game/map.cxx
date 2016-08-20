@@ -99,6 +99,14 @@ void Map::setPacmanPosition(POINT *p, POINTFLOAT *pf)
 	pf->y = vertPoints[p->y];
 }
 
+void Map::setDivoPosition(POINT *p, POINTFLOAT *pf)
+{
+	p->x = startDivo.x;
+	p->y = startDivo.y;
+	pf->x = horzPoints[p->x];
+	pf->y = vertPoints[p->y];
+}
+
 bool Map::canMove(Movable *movable, int direction, POINT *p, POINTFLOAT *pf)
 {
 	if (direction == MOVE_LEFT) {

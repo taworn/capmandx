@@ -44,7 +44,7 @@ PlayScene::PlayScene()
 	map->load();
 
 	const int TIME = 300;
-	movHero = new Movable();
+	movHero = new Pacman();
 	movHero->add(0, 0, 2, TIME);
 	movHero->add(1, 2, 4, TIME);
 	movHero->add(2, 4, 6, TIME);

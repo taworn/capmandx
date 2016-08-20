@@ -57,6 +57,12 @@
     <ClCompile Include="src\game\movable.cxx">
       <Filter>Source Files\game</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\pacman.cxx">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\divo.cxx">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\d3d.hxx">
@@ -87,6 +93,12 @@
       <Filter>Header Files\game</Filter>
     </ClInclude>
     <ClInclude Include="src\game\movable.hxx">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\pacman.hxx">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\divo.hxx">
       <Filter>Header Files\game</Filter>
     </ClInclude>
   </ItemGroup>

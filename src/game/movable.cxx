@@ -52,13 +52,3 @@ void Movable::move(int direction)
 	}
 }
 
-void Movable::setMap(Map *map)
-{
-	assert(map);
-	this->map = map;
-
-	POINTFLOAT pf;
-	map->setPacmanPosition(&point, &pf);
-	animation.moveTo(pf.x, pf.y);
-}
-

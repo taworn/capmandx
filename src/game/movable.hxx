@@ -39,13 +39,14 @@ public:
 	int getX() const { return point.x; }
 	int getY() const { return point.y; }
 	void move(int direction);
-	void setMap(Map *map);
+	virtual void setMap(Map *map) = 0;
 
-private:
+protected:
 	POINT point;
 	Animation animation;
 	Map *map;
 
+private:
 	Movable(const Movable&);
 	Movable& operator=(const Movable&);
 };

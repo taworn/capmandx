@@ -7,6 +7,8 @@
 
 #include "map.hxx"
 #include "movable.hxx"
+#include "pacman.hxx"
+#include "divo.hxx"
 
 #endif // GAME_COMMON_HXX
 

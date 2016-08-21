@@ -33,13 +33,40 @@ void Divo::setId(int divoId)
 void Divo::nextMove()
 {
 	int dirs = map->canPreviewMove(this);
-	
-	while (1) {
-		int random = rand() % 4;
-		if (dirs & (1 << random)) {
-			nextDirection = random + 1;
-			break;
+	int count = 0;
+	if ((dirs & Map::MOVE_LEFT) == Map::MOVE_LEFT) count++;
+	if ((dirs & Map::MOVE_RIGHT) == Map::MOVE_RIGHT) count++;
+	if ((dirs & Map::MOVE_UP) == Map::MOVE_UP) count++;
+	if ((dirs & Map::MOVE_DOWN) == Map::MOVE_DOWN) count++;
+
+	if (count <= 0)
+		return;
+
+	else if (count == 1)
+		nextDirection = dirs;
+
+	else if (count == 2) {
+		if (!(nextDirection && (dirs & nextDirection) == nextDirection)) {
+			int randoms[2] = { 0 };
+			int end = 0;
+			if ((dirs & Map::MOVE_LEFT) == Map::MOVE_LEFT) randoms[end++] = Map::MOVE_LEFT;
+			if ((dirs & Map::MOVE_RIGHT) == Map::MOVE_RIGHT) randoms[end++] = Map::MOVE_RIGHT;
+			if ((dirs & Map::MOVE_UP) == Map::MOVE_UP) randoms[end++] = Map::MOVE_UP;
+			if ((dirs & Map::MOVE_DOWN) == Map::MOVE_DOWN) randoms[end++] = Map::MOVE_DOWN;
+			nextDirection = randoms[rand() % 2];
 		}
+	}
+
+	else {
+		int randoms[8] = { 0 };
+		int end = 0;
+		if ((dirs & Map::MOVE_LEFT) == Map::MOVE_LEFT) randoms[end++] = Map::MOVE_LEFT;
+		if ((dirs & Map::MOVE_RIGHT) == Map::MOVE_RIGHT) randoms[end++] = Map::MOVE_RIGHT;
+		if ((dirs & Map::MOVE_UP) == Map::MOVE_UP) randoms[end++] = Map::MOVE_UP;
+		if ((dirs & Map::MOVE_DOWN) == Map::MOVE_DOWN) randoms[end++] = Map::MOVE_DOWN;
+		if (nextDirection) randoms[end++] = nextDirection;
+
+		nextDirection = randoms[rand() % end];
 	}
 
 	move(nextDirection);

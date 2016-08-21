@@ -30,7 +30,6 @@ PlayScene::PlayScene()
 	for (int i = 0; i < 4; i++) {
 		movDivoes[i].setId(i);
 		movDivoes[i].setMap(&map);
-		movDivoes[i].nextMove();
 	}
 	movHero.setMap(&map);
 	timeStart = GetTickCount();
@@ -155,6 +154,11 @@ void PlayScene::render()
 	movDivoes[3].play(timeUsed);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
 	movDivoes[3].draw(device, spritePacman);
+
+	for (int i = 0; i < 4; i++) {
+		if (movDivoes[i].idle())
+			movDivoes[i].nextMove();
+	}
 
 	computeFPS();
 	device->EndScene();

@@ -19,7 +19,7 @@ Movable::Movable()
 	, walking()
 	, distance(0.0f), target(0.0f)
 	, currentDirection(0), nextDirection(0)
-	, timePerDistance(250), timeUsed(0)
+	, timePerDistance(350), timeUsed(0)
 	, animation(), map()
 {
 }

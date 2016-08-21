@@ -16,6 +16,7 @@ Pacman::~Pacman()
 
 Pacman::Pacman()
 {
+	timePerDistance = 200;
 	add(0, 0, 2, TIME_PER_ANI_FRAME);
 	add(1, 2, 4, TIME_PER_ANI_FRAME);
 	add(2, 4, 6, TIME_PER_ANI_FRAME);

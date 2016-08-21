@@ -7,9 +7,9 @@
 
 #include "movable.hxx"
 
-/**
- * A divo class.
- */
+ /**
+  * A divo class.
+  */
 class Divo : public Movable
 {
 public:
@@ -24,6 +24,7 @@ public:
 	Divo();
 
 	void setId(int divoId);
+	bool idle() const { return !walking; }
 	virtual void nextMove();
 	virtual void setMap(Map *map);
 

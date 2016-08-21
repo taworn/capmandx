@@ -44,7 +44,7 @@ void Animation::draw(IDirect3DDevice9 *device, Sprite *sprite)
 	sprite->draw(device, currentImage);
 
 	ULONGLONG usage = GetTickCount() - timeStart;
-	if (usage > plays[currentPlaying].time) {
+	if (usage > (ULONGLONG)plays[currentPlaying].time) {
 		currentImage++;
 		if (currentImage >= plays[currentPlaying].end)
 			currentImage = plays[currentPlaying].start;

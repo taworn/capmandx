@@ -36,9 +36,14 @@ public:
 	bool load();
 
 	/**
-	 * Draws map
+	 * Gets start position for Divo.
 	 */
-	void draw(IDirect3DDevice9 *device, Sprite *sprite);
+	void getDivoStartPosition(POINT *p, POINTFLOAT *pf);
+
+	/**
+	 * Gets start position for Pacman.
+	 */
+	void getPacmanStartPosition(POINT *p, POINTFLOAT *pf);
 
 	/**
 	 * Checks if direction is can be pass.
@@ -51,8 +56,10 @@ public:
 	 */
 	int canPreviewMove(Movable *movable);
 
-	void setPacmanPosition(POINT *p, POINTFLOAT *pf);
-	void setDivoPosition(POINT *p, POINTFLOAT *pf);
+	/**
+	 * Draws map.
+	 */
+	void draw(IDirect3DDevice9 *device, Sprite *sprite, D3DXMATRIX *matrixScale, POINTFLOAT *scaleUp);
 
 private:
 	union MapData {
@@ -72,8 +79,8 @@ private:
 	std::vector<float> vertBounds;
 	std::vector<float> vertPoints;
 
-	POINT startPacman;
 	POINT startDivo;
+	POINT startPacman;
 
 	Map(const Map&);
 	Map& operator=(const Map&);

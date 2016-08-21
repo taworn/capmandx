@@ -20,7 +20,8 @@ Movable::Movable()
 	, distance(0.0f), target(0.0f)
 	, currentDirection(0), nextDirection(0)
 	, timePerDistance(350), timeUsed(0)
-	, animation(), map()
+	, animation()
+	, map()
 {
 }
 
@@ -31,7 +32,6 @@ void Movable::move(int direction)
 		if (direction == Map::MOVE_LEFT) {
 			animation.use(0);
 			if (map->canMove(this, direction, &point, &pf)) {
-				BOOST_LOG_TRIVIAL(debug) << "Move to left";
 				distance = animation.getCurrentX() - pf.x;
 				target = pf.x;
 				currentDirection = direction;
@@ -43,7 +43,6 @@ void Movable::move(int direction)
 		else if (direction == Map::MOVE_RIGHT) {
 			animation.use(1);
 			if (map->canMove(this, direction, &point, &pf)) {
-				BOOST_LOG_TRIVIAL(debug) << "Move to right";
 				distance = pf.x - animation.getCurrentX();
 				target = pf.x;
 				currentDirection = direction;
@@ -55,7 +54,6 @@ void Movable::move(int direction)
 		else if (direction == Map::MOVE_UP) {
 			animation.use(2);
 			if (map->canMove(this, direction, &point, &pf)) {
-				BOOST_LOG_TRIVIAL(debug) << "Move to up";
 				distance = pf.y - animation.getCurrentY();
 				target = pf.y;
 				currentDirection = direction;
@@ -67,7 +65,6 @@ void Movable::move(int direction)
 		else if (direction == Map::MOVE_DOWN) {
 			animation.use(3);
 			if (map->canMove(this, direction, &point, &pf)) {
-				BOOST_LOG_TRIVIAL(debug) << "Move to down";
 				distance = animation.getCurrentY() - pf.y;
 				target = pf.y;
 				currentDirection = direction;
@@ -80,6 +77,11 @@ void Movable::move(int direction)
 	else {
 		nextDirection = direction;
 	}
+}
+
+void Movable::nextMove()
+{
+	move(nextDirection);
 }
 
 void Movable::play(ULONGLONG timeUsed)
@@ -136,8 +138,11 @@ void Movable::play(ULONGLONG timeUsed)
 	}
 }
 
-void Movable::nextMove()
+void Movable::draw(IDirect3DDevice9 *device, Sprite *sprite, D3DXMATRIX *matrixScale, POINTFLOAT *scaleUp)
 {
-	move(nextDirection);
+	D3DXMATRIX matrixTranslate;
+	D3DXMatrixTranslation(&matrixTranslate, getCurrentX() * scaleUp->x, getCurrentY() * scaleUp->y, 0);
+	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * *matrixScale));
+	animation.draw(device, sprite);
 }
 

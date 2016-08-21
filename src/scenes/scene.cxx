@@ -60,8 +60,12 @@ void Scene::computeFPS()
 void Scene::handleActivate(HWND hwnd, bool active)
 {
 	if (active) {
+		BOOST_LOG_TRIVIAL(debug) << "window is activate";
 		frameCount = 0;
 		timeStart = GetTickCount();
+	}
+	else {
+		BOOST_LOG_TRIVIAL(debug) << "window is deactivated";
 	}
 }
 

@@ -37,8 +37,8 @@ protected:
 	 */
 	void computeFPS();
 
-	RECT getScreenRect() const { return screenRect; }
 	int getFPS() const { return fps; }
+	RECT getScreenRect() const { return screenRect; }
 
 private:
 	RECT screenRect;

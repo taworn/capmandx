@@ -23,11 +23,21 @@ Divo::Divo()
 void Divo::setId(int divoId)
 {
 	assert(divoId >= 0 && divoId < 4);
-	add(0, (divoId + 1) * 8 + 0, (divoId + 1) * 8 + 2, TIME_PER_ANI_FRAME);
-	add(1, (divoId + 1) * 8 + 2, (divoId + 1) * 8 + 4, TIME_PER_ANI_FRAME);
-	add(2, (divoId + 1) * 8 + 4, (divoId + 1) * 8 + 6, TIME_PER_ANI_FRAME);
-	add(3, (divoId + 1) * 8 + 6, (divoId + 1) * 8 + 8, TIME_PER_ANI_FRAME);
-	use(0);
+	animation.add(0, (divoId + 1) * 8 + 0, (divoId + 1) * 8 + 2, TIME_PER_ANI_FRAME);
+	animation.add(1, (divoId + 1) * 8 + 2, (divoId + 1) * 8 + 4, TIME_PER_ANI_FRAME);
+	animation.add(2, (divoId + 1) * 8 + 4, (divoId + 1) * 8 + 6, TIME_PER_ANI_FRAME);
+	animation.add(3, (divoId + 1) * 8 + 6, (divoId + 1) * 8 + 8, TIME_PER_ANI_FRAME);
+	animation.use(0);
+}
+
+void Divo::setMap(Map *map)
+{
+	assert(map);
+	this->map = map;
+
+	POINTFLOAT pf;
+	map->getDivoStartPosition(&point, &pf);
+	animation.moveTo(pf.x, pf.y);
 }
 
 void Divo::nextMove()
@@ -70,15 +80,5 @@ void Divo::nextMove()
 	}
 
 	move(nextDirection);
-}
-
-void Divo::setMap(Map *map)
-{
-	assert(map);
-	this->map = map;
-
-	POINTFLOAT pf;
-	map->setDivoPosition(&point, &pf);
-	animation.moveTo(pf.x, pf.y);
 }
 

@@ -20,8 +20,8 @@ public:
 private:
 	ID3DXFont *titleFont;
 	Sprite *spritePacman;
-	Animation *aniHero;
 	Animation *aniDivo;
+	Animation *aniHero;
 	float modelX;
 
 public:

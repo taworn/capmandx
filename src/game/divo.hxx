@@ -7,9 +7,9 @@
 
 #include "movable.hxx"
 
- /**
-  * A divo class.
-  */
+/**
+ * A divo class.
+ */
 class Divo : public Movable
 {
 public:
@@ -23,10 +23,25 @@ public:
 	 */
 	Divo();
 
+	/**
+	 * Sets divo identifer, just used to distint animation's set.
+	 */
 	void setId(int divoId);
-	bool idle() const { return !walking; }
-	virtual void nextMove();
+
+	/**
+	 * Sets map.
+	 */
 	virtual void setMap(Map *map);
+
+	/**
+	 * After move animation completed, it's call this function.
+	 */
+	virtual void nextMove();
+
+	/**
+	 * Checks whether divo is walking or stand still.
+	 */
+	bool isIdle() const { return !walking; }
 
 private:
 	Divo(const Divo&);

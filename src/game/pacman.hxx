@@ -23,6 +23,9 @@ public:
 	 */
 	Pacman();
 
+	/**
+	 * Sets map.
+	 */
 	virtual void setMap(Map *map);
 
 private:

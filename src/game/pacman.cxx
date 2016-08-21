@@ -17,11 +17,11 @@ Pacman::~Pacman()
 Pacman::Pacman()
 {
 	timePerDistance = 200;
-	add(0, 0, 2, TIME_PER_ANI_FRAME);
-	add(1, 2, 4, TIME_PER_ANI_FRAME);
-	add(2, 4, 6, TIME_PER_ANI_FRAME);
-	add(3, 6, 8, TIME_PER_ANI_FRAME);
-	use(0);
+	animation.add(0, 0, 2, TIME_PER_ANI_FRAME);
+	animation.add(1, 2, 4, TIME_PER_ANI_FRAME);
+	animation.add(2, 4, 6, TIME_PER_ANI_FRAME);
+	animation.add(3, 6, 8, TIME_PER_ANI_FRAME);
+	animation.use(0);
 }
 
 void Pacman::setMap(Map *map)
@@ -30,7 +30,7 @@ void Pacman::setMap(Map *map)
 	this->map = map;
 
 	POINTFLOAT pf;
-	map->setPacmanPosition(&point, &pf);
+	map->getPacmanStartPosition(&point, &pf);
 	animation.moveTo(pf.x, pf.y);
 }
 

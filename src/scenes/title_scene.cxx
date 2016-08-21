@@ -15,36 +15,42 @@
 TitleScene::~TitleScene()
 {
 	BOOST_LOG_TRIVIAL(debug) << "TitleScene::~TitleScene() called";
-	if (aniDivo) {
-		delete aniDivo;
-		aniDivo = NULL;
-	}
 	if (aniHero) {
 		delete aniHero;
 		aniHero = NULL;
 	}
+	if (aniDivo) {
+		delete aniDivo;
+		aniDivo = NULL;
+	}
 	fini();
 }
 
-TitleScene::TitleScene() : Scene(), titleFont(), modelX(0.0f)
+TitleScene::TitleScene() 
+	: Scene()
+	, titleFont()
+	, spritePacman()
+	, aniDivo()
+	, aniHero()
+	, modelX(0.0f)
 {
 	BOOST_LOG_TRIVIAL(debug) << "TitleScene::TitleScene() called";
 	init();
 
 	const int TIME = 300;
-	aniHero = new Animation();
-	aniHero->add(0, 0, 2, TIME);
-	aniHero->add(1, 2, 4, TIME);
-	aniHero->add(2, 4, 6, TIME);
-	aniHero->add(3, 6, 8, TIME);
-	aniHero->use(0);
-
 	aniDivo = new Animation();
 	aniDivo->add(0, 8, 10, TIME);
 	aniDivo->add(1, 10, 12, TIME);
 	aniDivo->add(2, 12, 14, TIME);
 	aniDivo->add(3, 14, 16, TIME);
 	aniDivo->use(0);
+
+	aniHero = new Animation();
+	aniHero->add(0, 0, 2, TIME);
+	aniHero->add(1, 2, 4, TIME);
+	aniHero->add(2, 4, 6, TIME);
+	aniHero->add(3, 6, 8, TIME);
+	aniHero->use(0);
 }
 
 void TitleScene::init()
@@ -75,7 +81,7 @@ bool TitleScene::handleKey(HWND hwnd, WPARAM key)
 {
 	if (key == VK_RETURN) {
 		// ENTER
-		OutputDebugStringW(L"ENTER keydown\n");
+		BOOST_LOG_TRIVIAL(debug) << "ENTER keydown";
 		Game::instance()->changeScene(SCENE_PLAY);
 		return true;
 	}

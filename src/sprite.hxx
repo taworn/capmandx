@@ -34,6 +34,16 @@ public:
 	void draw(IDirect3DDevice9 *device, int imageIndex);
 
 	/**
+	 * Prepares batch for operation.
+	 */
+	void prepareBatch(IDirect3DDevice9 *device, int width, int height);
+
+	/**
+	 * Draws batch sprites.
+	 */
+	void drawBatch(IDirect3DDevice9 *device, std::vector<float> horz, std::vector<float> vert, int *imageIndex);
+
+	/**
 	 * Gets number of images.
 	 */
 	int getImageCount() const { return sliceHorz * sliceVert; }
@@ -45,6 +55,7 @@ private:
 	};
 
 	IDirect3DVertexBuffer9 *verticesBuffer;
+	IDirect3DVertexBuffer9 *verticesBufferBatch;
 	IDirect3DTexture9 *texture;
 	std::vector<float> uData;
 	std::vector<float> vData;

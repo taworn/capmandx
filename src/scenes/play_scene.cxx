@@ -27,6 +27,7 @@ PlayScene::PlayScene()
 	BOOST_LOG_TRIVIAL(debug) << "PlayScene::PlayScene() called";
 	init();
 	map.load();
+	spriteMap->prepareBatch(Game::instance()->getDevice(), map.getWidth(), map.getHeight());
 	for (int i = 0; i < 4; i++) {
 		movDivoes[i].setId(i);
 		movDivoes[i].setMap(&map);
@@ -43,6 +44,9 @@ void PlayScene::init()
 	spriteMap->init(device, L".\\res\\map.png", 2, 2);
 	spritePacman = new Sprite();
 	spritePacman->init(device, L".\\res\\pacman.png", 8, 8);
+
+	if (map.getWidth() > 0 && map.getHeight() > 0)
+		spriteMap->prepareBatch(device, map.getWidth(), map.getHeight());
 }
 
 void PlayScene::fini()
@@ -128,15 +132,16 @@ void PlayScene::render()
 	device->SetTransform(D3DTS_VIEW, &matrixView);
 	device->SetTransform(D3DTS_PROJECTION, &matrixProjection);
 
-	// sets scaling
+	// drawing map
 	D3DXMATRIX matrixScale;
+	D3DXMatrixScaling(&matrixScale, 1.0f, 1.0f, 1.0f);
+	map.draw(device, spriteMap, &matrixScale);
+
+	// drawing movables
 	D3DXMatrixScaling(&matrixScale, 0.0625f, 0.0625f, 1.0f);
 	POINTFLOAT scaleUp;
 	scaleUp.x = 16.0f;
 	scaleUp.y = 16.0f;
-
-	// drawing
-	map.draw(device, spriteMap, &matrixScale, &scaleUp);
 	movDivoes[0].draw(device, spritePacman, &matrixScale, &scaleUp);
 	movDivoes[1].draw(device, spritePacman, &matrixScale, &scaleUp);
 	movDivoes[2].draw(device, spritePacman, &matrixScale, &scaleUp);

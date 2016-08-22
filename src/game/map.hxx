@@ -59,7 +59,11 @@ public:
 	/**
 	 * Draws map.
 	 */
-	void draw(IDirect3DDevice9 *device, Sprite *sprite, D3DXMATRIX *matrixScale, POINTFLOAT *scaleUp);
+	void draw(IDirect3DDevice9 *device, Sprite *sprite, D3DXMATRIX *matrixScale);
+
+	int getWidth() const { return width; }
+	int getHeight() const { return height; }
+	int* getImageData() { return imageData; }
 
 private:
 	union MapData {
@@ -72,7 +76,8 @@ private:
 		int data;
 	};
 	int width, height;
-	MapData *mapData;
+	char *mapData;
+	int *imageData;
 
 	std::vector<float> horzBounds;
 	std::vector<float> horzPoints;

@@ -26,7 +26,7 @@ TitleScene::~TitleScene()
 	fini();
 }
 
-TitleScene::TitleScene() 
+TitleScene::TitleScene()
 	: Scene()
 	, titleFont()
 	, spritePacman()

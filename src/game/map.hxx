@@ -57,6 +57,11 @@ public:
 	int canPreviewMove(Movable *movable);
 
 	/**
+	 * Checks whether that the floor has item.
+	 */
+	bool hasItem(Movable *movable);
+
+	/**
 	 * Draws map.
 	 */
 	void draw(IDirect3DDevice9 *device, Sprite *sprite, D3DXMATRIX *matrixScale);
@@ -78,6 +83,7 @@ private:
 	int width, height;
 	char *mapData;
 	int *imageData;
+	int itemCount;
 
 	std::vector<float> horzBounds;
 	std::vector<float> horzPoints;

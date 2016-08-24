@@ -11,7 +11,10 @@
 #include "game.hxx"
 #include "scenes/scene.hxx"
 #include "scenes/title_scene.hxx"
+ //#include "scenes/stage_scene.hxx"
 #include "scenes/play_scene.hxx"
+#include "scenes/gameover_scene.hxx"
+//#include "scenes/win_scene.hxx"
 
 Game *Game::singleton = NULL;
 
@@ -26,50 +29,41 @@ Game::Game(IDirect3DDevice9 *dev)
 	: d3dDev(dev)
 	, smallFont(), normalFont(), bigFont()
 	, textureVerticesBuffer()
-	, scene()
+	, scene(), nextSceneId(SCENE_TITLE)
 {
 	assert(singleton == NULL);
 	singleton = this;
 	init();
-	scene = new TitleScene();
-	//scene = new PlayScene();
 }
 
 void Game::changeScene(int sceneId)
 {
 	BOOST_LOG_TRIVIAL(debug) << "changeScene() called, sceneId = " << sceneId;
-
-	delete scene;
-
-	switch (sceneId) {
-	default:
-	case SCENE_DEFAULT:
-		scene = new Scene();
-		break;
-	case SCENE_TITLE:
-		scene = new TitleScene();
-		break;
-	case SCENE_PLAY:
-		scene = new PlayScene();
-		break;
-	}
+	nextSceneId = sceneId;
 }
 
 void Game::handleActivate(HWND hwnd, bool active)
 {
-	scene->handleActivate(hwnd, active);
+	if (scene)
+		scene->handleActivate(hwnd, active);
 }
 
 bool Game::handleKey(HWND hwnd, WPARAM key)
 {
-	return scene->handleKey(hwnd, key);
+	if (scene)
+		return scene->handleKey(hwnd, key);
+	else
+		return false;
 }
 
 void Game::render()
 {
 	HRESULT hr;
 	if (SUCCEEDED(hr = d3dDev->TestCooperativeLevel())) {
-		scene->render();
+		if (nextSceneId < 0)
+			scene->render();
+		else
+			switchScene();
 	}
 	else if (hr == D3DERR_DEVICELOST) {
 		Sleep(1);
@@ -94,6 +88,36 @@ void Game::draw(IDirect3DTexture9 *image)
 	device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 	device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 	device->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+}
+
+void Game::switchScene()
+{
+	BOOST_LOG_TRIVIAL(debug) << "perform switchScene() called, sceneId = " << nextSceneId;
+	if (scene)
+		delete scene;
+
+	switch (nextSceneId) {
+	default:
+	case SCENE_DEFAULT:
+		scene = new Scene();
+		break;
+	case SCENE_TITLE:
+		scene = new TitleScene();
+		break;
+	case SCENE_STAGE:
+		//scene = new StageScene();
+		break;
+	case SCENE_PLAY:
+		scene = new PlayScene();
+		break;
+	case SCENE_GAMEOVER:
+		scene = new GameOverScene();
+		break;
+	case SCENE_WIN:
+		//scene = new WinScene();
+		break;
+	}
+	nextSceneId = -1;
 }
 
 void Game::init()

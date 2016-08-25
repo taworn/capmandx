@@ -162,6 +162,7 @@
     <ClCompile Include="src\d3d.cxx" />
     <ClCompile Include="src\game.cxx" />
     <ClCompile Include="src\game\divo.cxx" />
+    <ClCompile Include="src\game\gamedata.cxx" />
     <ClCompile Include="src\game\map.cxx" />
     <ClCompile Include="src\game\movable.cxx" />
     <ClCompile Include="src\game\pacman.cxx" />
@@ -178,6 +179,7 @@
     <ClInclude Include="src\game.hxx" />
     <ClInclude Include="src\game\common.hxx" />
     <ClInclude Include="src\game\divo.hxx" />
+    <ClInclude Include="src\game\gamedata.hxx" />
     <ClInclude Include="src\game\map.hxx" />
     <ClInclude Include="src\game\movable.hxx" />
     <ClInclude Include="src\game\pacman.hxx" />

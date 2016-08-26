@@ -17,7 +17,7 @@ GameData::~GameData()
 	singleton = NULL;
 }
 
-GameData::GameData()
+GameData::GameData() : divoLife(0), divoList()
 {
 	assert(singleton == NULL);
 	singleton = this;
@@ -25,6 +25,7 @@ GameData::GameData()
 
 void GameData::clear()
 {
+	divoLife = 3;
 	divoList.clear();
 }
 

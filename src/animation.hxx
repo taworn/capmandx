@@ -73,6 +73,8 @@ public:
 			currentY += velocityY;
 	}
 
+	bool isEnded() const { return ending; }
+
 private:
 	static const int PLAYING_MAX = 16;
 	struct PLAYING {

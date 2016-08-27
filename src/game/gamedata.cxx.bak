@@ -36,7 +36,7 @@ void GameData::clear()
 bool GameData::checkAllDivoDead()
 {
 	int i = 0;
-	while (i < (int)divoList.size()) {
+	while (i < divoList.size()) {
 		if (!divoList[i]->isDead())
 			return false;
 		else

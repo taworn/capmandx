@@ -170,6 +170,7 @@
     <ClCompile Include="src\scenes\play_scene.cxx" />
     <ClCompile Include="src\scenes\scene.cxx" />
     <ClCompile Include="src\scenes\title_scene.cxx" />
+    <ClCompile Include="src\scenes\win_scene.cxx" />
     <ClCompile Include="src\sprite.cxx" />
     <ClCompile Include="src\winmain.cxx" />
   </ItemGroup>
@@ -187,6 +188,7 @@
     <ClInclude Include="src\scenes\play_scene.hxx" />
     <ClInclude Include="src\scenes\scene.hxx" />
     <ClInclude Include="src\scenes\title_scene.hxx" />
+    <ClInclude Include="src\scenes\win_scene.hxx" />
     <ClInclude Include="src\sprite.hxx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -124,10 +124,10 @@ void PlayScene::render()
 		1.0f, 25.0f);  // near & far view-plane
 	D3DXMATRIX matrixView;
 	D3DXMatrixLookAtLH(&matrixView,
-		//&D3DXVECTOR3(movHero.getCurrentX(), movHero.getCurrentY(), -3.0f),  // the camera position
-		//&D3DXVECTOR3(movHero.getCurrentX(), movHero.getCurrentY(), 0.0f),   // the look-at position
-		&D3DXVECTOR3(0.0f, 0.0f, -3.0f),  // the camera position
-		&D3DXVECTOR3(0.0f, 0.0f, 0.0f),   // the look-at position
+		//&D3DXVECTOR3(movHero.getCurrentX(), movHero.getCurrentY(), -10.0f),  // the camera position
+		//&D3DXVECTOR3(movHero.getCurrentX(), movHero.getCurrentY(), 1.0f),   // the look-at position
+		&D3DXVECTOR3(0.0f, 0.0f, -10.0f),  // the camera position
+		&D3DXVECTOR3(0.0f, 0.0f, 1.0f),   // the look-at position
 		&D3DXVECTOR3(0.0f, 1.0f, 0.0f));  // the up direction
 	device->SetTransform(D3DTS_VIEW, &matrixView);
 	device->SetTransform(D3DTS_PROJECTION, &matrixProjection);

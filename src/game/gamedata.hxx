@@ -68,7 +68,18 @@ public:
 		return (int)divoList.size();
 	}
 
+	/**
+	 * Checks that all divoes dead.
+	 */
+	bool checkAllDivoDead();
+
+	/**
+	 * Retrieves bonus after get item.
+	 */
+	void getBonus(int item);
+
 private:
+	int score;
 	int divoLife;
 	std::vector<Divo*> divoList;
 

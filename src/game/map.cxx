@@ -206,10 +206,11 @@ int Map::canPreviewMove(Movable *movable)
 	return result;
 }
 
-bool Map::hasItem(Movable *movable)
+bool Map::checkAndGetItem(Movable *movable, int *item)
 {
 	int index = movable->getY() * width + movable->getX();
 	if (mapData[index] & 0x10) {
+		*item = imageData[index];
 		imageData[index] = 0;
 		mapData[index] &= ~0x10;
 		itemCount--;
@@ -229,6 +230,6 @@ void Map::draw(IDirect3DDevice9 *device, Sprite *sprite, D3DXMATRIX *matrixScale
 	D3DXMATRIX matrixTranslate;
 	D3DXMatrixTranslation(&matrixTranslate, 0, 0, 0);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * *matrixScale));
-	sprite->drawBatch(device, horzBounds, vertBounds, imageData);
+	sprite->drawBatch(device, horzBounds, vertBounds, 0.0f, imageData);
 }
 

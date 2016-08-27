@@ -41,7 +41,7 @@ public:
 	/**
 	 * Draws batch sprites.
 	 */
-	void drawBatch(IDirect3DDevice9 *device, std::vector<float> horz, std::vector<float> vert, int *imageIndex);
+	void drawBatch(IDirect3DDevice9 *device, std::vector<float> horz, std::vector<float> vert, float z, int *imageIndex);
 
 	/**
 	 * Gets number of images.

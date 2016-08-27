@@ -17,7 +17,7 @@ GameData::~GameData()
 	singleton = NULL;
 }
 
-GameData::GameData() : divoLife(0), divoList()
+GameData::GameData() : score(0), divoLife(0), divoList()
 {
 	assert(singleton == NULL);
 	singleton = this;
@@ -25,7 +25,29 @@ GameData::GameData() : divoLife(0), divoList()
 
 void GameData::clear()
 {
-	divoLife = 3;
+	divoLife = 5;
 	divoList.clear();
+}
+
+bool GameData::checkAllDivoDead()
+{
+	int i = 0;
+	while (i < divoList.size()) {
+		if (!divoList[i]->isDead())
+			return false;
+		else
+			i++;
+	}
+	return true;
+}
+
+void GameData::getBonus(int item)
+{
+	if (item == 0x01) {
+		score += 10;
+	}
+	else if (item == 0x02) {
+		score += 100;
+	}
 }
 

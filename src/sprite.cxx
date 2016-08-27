@@ -97,7 +97,7 @@ void Sprite::prepareBatch(IDirect3DDevice9 *device, int width, int height)
 	assert(verticesBufferBatch);
 }
 
-void Sprite::drawBatch(IDirect3DDevice9 *device, std::vector<float> horz, std::vector<float> vert, int *imageIndex)
+void Sprite::drawBatch(IDirect3DDevice9 *device, std::vector<float> horz, std::vector<float> vert, float z, int *imageIndex)
 {
 	int width = (int)horz.size() - 1;
 	int height = (int)vert.size() - 1;
@@ -114,10 +114,10 @@ void Sprite::drawBatch(IDirect3DDevice9 *device, std::vector<float> horz, std::v
 			float v0 = vData[vIndex];
 			float v1 = vData[vIndex + 1];
 
-			verticesData[indices++] = { horz[i], vert[j], 0.0f,          u0, v0, };
-			verticesData[indices++] = { horz[i + 1], vert[j], 0.0f,      u1, v0, };
-			verticesData[indices++] = { horz[i], vert[j + 1], 0.0f,      u0, v1, };
-			verticesData[indices++] = { horz[i + 1], vert[j + 1], 0.0f,  u1, v1, };
+			verticesData[indices++] = { horz[i], vert[j], z,          u0, v0, };
+			verticesData[indices++] = { horz[i + 1], vert[j], z,      u1, v0, };
+			verticesData[indices++] = { horz[i], vert[j + 1], z,      u0, v1, };
+			verticesData[indices++] = { horz[i + 1], vert[j + 1], z,  u1, v1, };
 		}
 	}
 	verticesBufferBatch->Unlock();

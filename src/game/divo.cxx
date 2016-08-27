@@ -52,6 +52,12 @@ void Divo::nextAction()
 			getAnimation()->moveTo(pf.x, pf.y);
 			getAnimation()->use(ACTION_LEFT);
 		}
+		else {
+			if (GameData::instance()->checkAllDivoDead()) {
+				BOOST_LOG_TRIVIAL(debug) << "all Divoes are dead";
+				Game::instance()->changeScene(Game::SCENE_WIN);
+			}
+		}
 	}
 }
 
@@ -78,7 +84,6 @@ void Divo::kill()
 		else
 			getAnimation()->use(ACTION_DEAD_UP);
 	}
-
 }
 
 void Divo::setMap(Map *map)
@@ -95,8 +100,9 @@ void Divo::setMap(Map *map)
 
 int Divo::decision(int moveDirection)
 {
-	if (getMap()->hasItem(this)) {
-
+	int item = 0;
+	if (getMap()->checkAndGetItem(this, &item)) {
+		GameData::instance()->getBonus(item);
 	}
 
 	// checks directions can move

@@ -44,7 +44,7 @@ void PlayScene::init()
 	BOOST_LOG_TRIVIAL(debug) << "PlayScene::init() called";
 	IDirect3DDevice9 *device = Game::instance()->getDevice();
 	spriteMap = new Sprite();
-	spriteMap->init(device, L".\\res\\map.png", 2, 2);
+	spriteMap->init(device, L".\\res\\map0.png", 2, 2);
 	spritePacman = new Sprite();
 	spritePacman->init(device, L".\\res\\pacman.png", 8, 8);
 

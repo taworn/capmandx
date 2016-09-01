@@ -5,9 +5,9 @@
 #ifndef GAME_GAMEDATA_HXX
 #define GAME_GAMEDATA_HXX
 
-/**
- * A GameData class.
- */
+ /**
+  * A GameData class.
+  */
 class GameData
 {
 public:
@@ -27,6 +27,11 @@ public:
 	 * Clears data.
 	 */
 	void clear();
+
+	/**
+	 * Gets current score.
+	 */
+	int getScore() const { return score; }
 
 	/**
 	 * Decrease divo life by one.

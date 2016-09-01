@@ -163,6 +163,12 @@ void PlayScene::render()
 			movDivoes[i].nextAction();
 	}
 
+	RECT rc = getScreenRect();
+	int score = GameData::instance()->getScore();
+	wchar_t scoreString[64];
+	wsprintf(scoreString, L"%d", score);
+	game->getNormalFont()->DrawText(NULL, scoreString, -1, &rc, DT_LEFT | DT_TOP, D3DCOLOR_XRGB(0xFF, 0xFF, 0xFF));
+
 	computeFPS();
 	device->EndScene();
 	device->Present(NULL, NULL, NULL, NULL);

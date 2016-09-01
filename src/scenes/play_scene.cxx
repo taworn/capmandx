@@ -28,7 +28,9 @@ PlayScene::PlayScene()
 	init();
 
 	GameData::instance()->clear();
-	map.load();
+	map.load(".\\res\\debug.map");
+	//map.load(".\\res\\test0.map");
+	//map.load(".\\res\\test1.map");
 	spriteMap->prepareBatch(Game::instance()->getDevice(), map.getWidth(), map.getHeight());
 	for (int i = 0; i < 4; i++) {
 		movDivoes[i].setId(i);
@@ -124,12 +126,18 @@ void PlayScene::render()
 		2.0f, 2.0f,    // width & height
 		1.0f, 25.0f);  // near & far view-plane
 	D3DXMATRIX matrixView;
-	D3DXMatrixLookAtLH(&matrixView,
-		//&D3DXVECTOR3(movHero.getCurrentX(), movHero.getCurrentY(), -10.0f),  // the camera position
-		//&D3DXVECTOR3(movHero.getCurrentX(), movHero.getCurrentY(), 1.0f),   // the look-at position
-		&D3DXVECTOR3(0.0f, 0.0f, -10.0f),  // the camera position
-		&D3DXVECTOR3(0.0f, 0.0f, 1.0f),   // the look-at position
-		&D3DXVECTOR3(0.0f, 1.0f, 0.0f));  // the up direction
+	if (map.getWidth() > 16 || map.getHeight() > 16) {
+		D3DXMatrixLookAtLH(&matrixView,
+			&D3DXVECTOR3(movHero.getCurrentX(), movHero.getCurrentY(), -10.0f),  // the camera position
+			&D3DXVECTOR3(movHero.getCurrentX(), movHero.getCurrentY(), 1.0f),   // the look-at position
+			&D3DXVECTOR3(0.0f, 1.0f, 0.0f));  // the up direction
+	}
+	else {
+		D3DXMatrixLookAtLH(&matrixView,
+			&D3DXVECTOR3(0.0f, 0.0f, -10.0f),  // the camera position
+			&D3DXVECTOR3(0.0f, 0.0f, 1.0f),   // the look-at position
+			&D3DXVECTOR3(0.0f, 1.0f, 0.0f));  // the up direction
+	}
 	device->SetTransform(D3DTS_VIEW, &matrixView);
 	device->SetTransform(D3DTS_PROJECTION, &matrixProjection);
 

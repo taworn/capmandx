@@ -17,6 +17,10 @@ public:
 	virtual void init();
 	virtual void fini();
 
+private:
+	Sprite *spriteUI;
+	int menuIndex;
+
 public:
 	virtual bool handleKey(HWND hwnd, WPARAM key);
 	virtual void render();

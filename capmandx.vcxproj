@@ -169,6 +169,7 @@
     <ClCompile Include="src\scenes\gameover_scene.cxx" />
     <ClCompile Include="src\scenes\play_scene.cxx" />
     <ClCompile Include="src\scenes\scene.cxx" />
+    <ClCompile Include="src\scenes\stage_scene.cxx" />
     <ClCompile Include="src\scenes\title_scene.cxx" />
     <ClCompile Include="src\scenes\win_scene.cxx" />
     <ClCompile Include="src\sprite.cxx" />
@@ -187,6 +188,7 @@
     <ClInclude Include="src\scenes\gameover_scene.hxx" />
     <ClInclude Include="src\scenes\play_scene.hxx" />
     <ClInclude Include="src\scenes\scene.hxx" />
+    <ClInclude Include="src\scenes\stage_scene.hxx" />
     <ClInclude Include="src\scenes\title_scene.hxx" />
     <ClInclude Include="src\scenes\win_scene.hxx" />
     <ClInclude Include="src\sprite.hxx" />

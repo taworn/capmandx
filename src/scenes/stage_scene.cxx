@@ -25,6 +25,7 @@ StageScene::StageScene()
 	init();
 	timeStart = GetTickCount();
 	timeUsed = 0;
+	BOOST_LOG_TRIVIAL(debug) << "start stage " << GameData::instance()->getStage() + 1;
 }
 
 void StageScene::init()
@@ -65,7 +66,7 @@ void StageScene::render()
 
 	RECT rc = getScreenRect();
 	wchar_t buffer[64];
-	wsprintf(buffer, L"Stage %d", 1);
+	wsprintf(buffer, L"Stage %d", GameData::instance()->getStage() + 1);
 	game->getBigFont()->DrawText(NULL, buffer, -1, &rc, DT_CENTER | DT_VCENTER, D3DCOLOR_XRGB(0xFF, 0xFF, 0xFF));
 
 	ULONGLONG timeUsed = GetTickCount() - timeStart;

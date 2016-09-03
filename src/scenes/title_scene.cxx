@@ -33,6 +33,7 @@ TitleScene::TitleScene()
 	, aniDivo()
 	, aniHero()
 	, modelX(0.0f)
+	, menuIndex(0)
 {
 	BOOST_LOG_TRIVIAL(debug) << "TitleScene::TitleScene() called";
 	init();
@@ -62,11 +63,17 @@ void TitleScene::init()
 
 	spritePacman = new Sprite();
 	spritePacman->init(device, L".\\res\\pacman.png", 8, 8);
+	spriteUI = new Sprite();
+	spriteUI->init(device, L".\\res\\ui.png", 2, 2);
 }
 
 void TitleScene::fini()
 {
 	BOOST_LOG_TRIVIAL(debug) << "TitleScene::fini() called";
+	if (spriteUI) {
+		delete spriteUI;
+		spriteUI = NULL;
+	}
 	if (spritePacman) {
 		delete spritePacman;
 		spritePacman = NULL;
@@ -82,8 +89,26 @@ bool TitleScene::handleKey(HWND hwnd, WPARAM key)
 	if (key == VK_RETURN) {
 		// ENTER
 		BOOST_LOG_TRIVIAL(debug) << "ENTER keydown";
-		GameData::instance()->reset();
-		Game::instance()->changeScene(Game::SCENE_STAGE);
+		if (menuIndex == 0) {
+			GameData::instance()->reset();
+			Game::instance()->changeScene(Game::SCENE_STAGE);
+		}
+		else if (menuIndex == 1)
+			Game::instance()->changeScene(Game::SCENE_STAGE);
+		return true;
+	}
+	else if (key == 0x57 || key == VK_UP) {
+		// up
+		menuIndex--;
+		if (menuIndex < 0)
+			menuIndex = 1;
+		return true;
+	}
+	else if (key == 0x53 || key == VK_DOWN) {
+		// down
+		menuIndex++;
+		if (menuIndex > 1)
+			menuIndex = 0;
 		return true;
 	}
 	return false;
@@ -99,9 +124,6 @@ void TitleScene::render()
 	RECT rc = getScreenRect();
 	rc.bottom -= 256;
 	titleFont->DrawText(NULL, TEXT("Capman"), -1, &rc, DT_CENTER | DT_VCENTER, D3DCOLOR_XRGB(0xFF, 0xFF, 0x80));
-	rc = getScreenRect();
-	rc.top += 512;
-	game->getNormalFont()->DrawText(NULL, TEXT("Press ENTER to Start"), -1, &rc, DT_CENTER | DT_VCENTER, D3DCOLOR_XRGB(0xFF, 0xFF, 0xFF));
 
 	// combining projecting and viewing matrices
 	D3DXMATRIX matrixProjection;
@@ -126,6 +148,24 @@ void TitleScene::render()
 	D3DXMatrixTranslation(&matrixTranslate, (modelX - 0.25f) * 20, -0.2f * 20, 0);
 	device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
 	aniDivo->draw(device, spritePacman);
+
+	rc = getScreenRect();
+	rc.top += 32;
+	game->getNormalFont()->DrawText(NULL, TEXT("Start"), -1, &rc, DT_CENTER | DT_VCENTER, D3DCOLOR_XRGB(0xFF, 0xFF, 0xFF));
+	rc.top += 96;
+	game->getNormalFont()->DrawText(NULL, TEXT("Continue"), -1, &rc, DT_CENTER | DT_VCENTER, D3DCOLOR_XRGB(0xFF, 0xFF, 0xFF));
+
+	D3DXMatrixScaling(&matrixScale, 0.03f, 0.03f, 1.0f);
+	if (menuIndex == 0) {
+		D3DXMatrixTranslation(&matrixTranslate, -0.16f * 33.33f, -(32.0f / 768.0f * 2.0f) * 33.33f / 2, 0.0f);
+		device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
+		spriteUI->draw(device, 1);
+	}
+	else if (menuIndex == 1) {
+		D3DXMatrixTranslation(&matrixTranslate, -0.16f * 33.33f, -(128.0f / 768.0f * 2.0f) * 33.33f / 2, 0.0f);
+		device->SetTransform(D3DTS_WORLD, &(matrixTranslate * matrixScale));
+		spriteUI->draw(device, 1);
+	}
 
 	modelX -= 0.01f;
 	if (modelX < -1.0f)

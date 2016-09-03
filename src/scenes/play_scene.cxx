@@ -28,9 +28,14 @@ PlayScene::PlayScene()
 	init();
 
 	GameData::instance()->clear();
-	map.load(".\\res\\debug.map");
-	//map.load(".\\res\\test0.map");
-	//map.load(".\\res\\test1.map");
+
+	char file[MAX_PATH] = { 0 };
+	sprintf(file, ".\\res\\stage%02d.map", GameData::instance()->getStage() + 1);
+	//strcpy(file, ".\\res\\debug.map");
+	//strcpy(file, ".\\res\\test0.map");
+	//strcpy(file, ".\\res\\test1.map");
+
+	map.load(file);
 	spriteMap->prepareBatch(Game::instance()->getDevice(), map.getWidth(), map.getHeight());
 	for (int i = 0; i < 4; i++) {
 		movDivoes[i].setId(i);
@@ -45,8 +50,12 @@ void PlayScene::init()
 {
 	BOOST_LOG_TRIVIAL(debug) << "PlayScene::init() called";
 	IDirect3DDevice9 *device = Game::instance()->getDevice();
+	
+	int i = GameData::instance()->getStage();
+	wchar_t file[MAX_PATH] = { 0 };
+	wsprintf(file, L".\\res\\map%d.png", i % 2);
 	spriteMap = new Sprite();
-	spriteMap->init(device, L".\\res\\map0.png", 2, 2);
+	spriteMap->init(device, file, 2, 2);
 	spritePacman = new Sprite();
 	spritePacman->init(device, L".\\res\\pacman.png", 8, 8);
 

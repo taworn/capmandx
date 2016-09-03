@@ -70,7 +70,7 @@ void GameData::getBonus(int item)
 	else if (item == 0x02) {
 		score += 100;
 		reverseMode = true;
-		reverseTime = 1000 * 3;
+		reverseTime = maxReverseTime;
 	}
 }
 
@@ -78,7 +78,7 @@ void GameData::update(ULONGLONG timeUsed)
 {
 	if (reverseMode) {
 		reverseTime -= timeUsed;
-		if (reverseTime <= 0)
+		if ((LONGLONG)reverseTime <= 0)
 			reverseMode = false;
 	}
 }

@@ -50,7 +50,7 @@ void PlayScene::init()
 {
 	BOOST_LOG_TRIVIAL(debug) << "PlayScene::init() called";
 	IDirect3DDevice9 *device = Game::instance()->getDevice();
-	
+
 	int i = GameData::instance()->getStage();
 	wchar_t file[MAX_PATH] = { 0 };
 	wsprintf(file, L".\\res\\map%d.png", i % 2);
